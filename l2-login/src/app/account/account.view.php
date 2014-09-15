@@ -3,9 +3,11 @@
 class AccountView {
 
 	private $model;
+	public $cookieService;
 
 	public function __construct($model) {
 		$this->model = $model;
+		$this->cookieService = new CookieService();
 	}
 
 	public function didLogin() {
@@ -21,8 +23,6 @@ class AccountView {
 	}
 
 	public function login() {
-		// $notification = $this->model->notifications->load();
-		
 		$username = '';
 
 		if (isset($_POST['username'])) {
@@ -40,8 +40,8 @@ class AccountView {
 						<input type='text' id='username' name='username' value='$username'>
 						<label for='password'>Password</label>
 						<input type='password' id='password' name='password'>
-						<label for='keep'>Håll mig inloggad</label>
-						<input type='checkbox' id='keep' name='keep'>
+						<label for='remember'>Håll mig inloggad</label>
+						<input type='checkbox' id='remember' name='remember'>
 						<button type='submit' name='login' class='btn btn-primary'>Logga in</button>
 					</fieldset>
 				</form>";

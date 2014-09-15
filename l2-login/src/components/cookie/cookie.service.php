@@ -3,22 +3,24 @@
 class CookieService {
 	private static $cookieName = "CookieService";
 
-	public function save($string) {
-		$_COOKIE[self::$cookieName] = $string;
-		setcookie( self::$cookieName, $string, time()+6000000);
+	public function save($name, $string) {
+		$_COOKIE[self::$cookieName . '::' . $name] = $string;
+		setcookie( self::$cookieName . '::' . $name, $string, time()+(60*60*24*30));
 	}
 
-	public function load() {
-		if (isset($_COOKIE[self::$cookieName])) {
-			$ret = $_COOKIE[self::$cookieName];
+	public function load($name) {
+		if (isset($_COOKIE[self::$cookieName . '::' . $name])) {
+			$ret = $_COOKIE[self::$cookieName . '::' . $name];
 		}
 		else {
-			$ret = "";
+			$ret = '';
 		}
 
-		setcookie(self::$cookieName, "", time() -1);
-
-		// debug_print_backtrace();
 		return $ret;
+	}
+
+	public function remove($name) {
+		$_COOKIE[self::$cookieName . '::' . $name] = '';
+		setcookie(self::$cookieName . '::' . $name, '', time()-1);
 	}
 }

@@ -1,40 +1,45 @@
 <?php
 
 class AccountModel {
-	private $adminUsername = 'Admin';
-	private $adminPassword = 'Password';
+	private $adminUsername;// = 'Admin';
+	private $adminPassword;// = crypt('Password', $username);
 	public $notifications;
 	private $notify;
 
 	public function __construct($notify) {
-		$this->notifications = new CookieService();
 		$this->notify = $notify;
+		$username = 'Admin';
+		$password = 'Password';
+
+		$this->adminUsername = $username;
+		$this->adminPassword = crypt($password, $username);
 	}
 
-	public function isLoggedIn() {
-		if (isset($_SESSION['loggedIn'])) {
-			return $_SESSION['loggedIn'];
+	public function logout() {
+		session_destroy();
+		session_start();
+		$this->notify->info('Du är nu utloggad.');
+	}
+
+	public function IsLoggedIn($username, $password) {
+		if ($username == $this->adminUsername && $password == $this->adminPassword) {
+			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public function validateLogin() {
+	public function validateCredentials($username, $password) {
 
-		if (!isset($_POST['username']) || $_POST['username'] == '') {
-			// $this->notifications->save('Användarnamn saknas.');
+		if ($username == '') {
 			$this->notify->error('Användarnamn saknas.');
 			return false;
 		}
 
-		if (!isset($_POST['password']) || $_POST['password'] == '') {
-			// $this->notifications->save('Lösenord saknas.');
+		if ($password == '') {
 			$this->notify->error('Lösenord saknas.');
 			return false;
 		}
-
-		$username = $_POST['username'];
-		$password = $_POST['password'];
 
 		if ($username != $this->adminUsername || $password != $this->adminPassword) {
 			$this->notify->error('Felaktigt användarnamn och/eller lösenord');
@@ -43,13 +48,8 @@ class AccountModel {
 
 
 		$this->notify->success('Inloggning lyckades.');
-		$_SESSION['loggedIn'] = true;
+		$_SESSION['username'] = $username;
+		$_SESSION['password'] = $password;
 		return true;
-	}
-
-	public function logout() {
-		session_destroy();
-		session_start();
-		$this->notify->info('Du är nu utloggad.');
 	}
 }

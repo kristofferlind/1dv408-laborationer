@@ -5,8 +5,6 @@ Notification = {type, message}
 type: error, success, info, warning
  */
 
-
-
 class Notify {
 	private $notifications = array();
 
