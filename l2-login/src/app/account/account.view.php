@@ -5,6 +5,48 @@ class AccountView {
 	private $model;
 	public $cookieService;
 
+	public function getUsername() {
+		if (isset($_POST['username'])) {
+			return $_POST['username'];
+		}
+		
+		return '';
+	}
+
+	public function getPassword() {
+		if (isset($_POST['password'])) {
+			return $password = crypt($_POST['password'], $this->getUsername());
+		}
+
+		return '';
+	}
+
+	public function getRemember() {
+		if (isset($_POST['remember'])) {
+			return $_POST['remember'];
+		} else {
+			return false;
+		}
+	}
+
+	public function remember() {
+		$token = $this->model->token;
+		$expiration = $this->model->tokenExpiration;
+		$this->cookieService->saveToken($token, $expiration);
+	}
+
+	public function getToken() {
+		if ($this->cookieService->load('token') != '') {
+			return $this->cookieService->load('token');
+		} else {
+			return '';
+		}
+	}
+
+	public function getUserAgent() {
+		return $_SERVER['HTTP_USER_AGENT'];
+	}
+
 	public function __construct($model) {
 		$this->model = $model;
 		$this->cookieService = new CookieService();
@@ -12,6 +54,15 @@ class AccountView {
 
 	public function didLogin() {
 		if (isset($_POST['login'])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function didLogout() {
+		if (isset($_GET['action']) && $_GET['action'] == 'logout') {
+			$this->cookieService->remove('token');
 			return true;
 		} else {
 			return false;

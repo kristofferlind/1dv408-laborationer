@@ -1,10 +1,13 @@
 <?php
 
 class AccountModel {
-	private $adminUsername;// = 'Admin';
-	private $adminPassword;// = crypt('Password', $username);
+	private $adminUsername;
+	private $adminPassword;
 	public $notifications;
 	private $notify;
+	private $accountDAL;
+	public $token;
+	public $tokenExpiration;
 
 	public function __construct($notify) {
 		$this->notify = $notify;
@@ -13,6 +16,8 @@ class AccountModel {
 
 		$this->adminUsername = $username;
 		$this->adminPassword = crypt($password, $username);
+
+		$this->accountDAL = new AccountDAL();
 	}
 
 	public function logout() {
@@ -21,16 +26,31 @@ class AccountModel {
 		$this->notify->info('Du är nu utloggad.');
 	}
 
-	public function IsLoggedIn($username, $password) {
-		if ($username == $this->adminUsername && $password == $this->adminPassword) {
+	public function IsLoggedIn($userAgent) {
+		if (!isset($_SESSION['username'])) { // || !isset($_SESSION['password'])) {
+			return false;
+		}
+
+		$username = $_SESSION['username'];
+		// $password = $_SESSION['password'];
+		if ($username == $this->adminUsername && $_SESSION['userAgent'] == $userAgent) { // && $password == $this->adminPassword) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public function validateCredentials($username, $password) {
+	public function validateToken($token) {
+		$result = $this->accountDAL->findRememberedUser($token);
+		if ($result != false) {
+			$_SESSION['username'] = $result;
+			return true;
+		}
+		
+		return false;
+	}
 
+	public function validateCredentials($username, $password, $remember, $userAgent) {
 		if ($username == '') {
 			$this->notify->error('Användarnamn saknas.');
 			return false;
@@ -46,10 +66,26 @@ class AccountModel {
 			return false;
 		}
 
+		if ($remember == true) {
+			$this->rememberUser($username);
+		}
 
 		$this->notify->success('Inloggning lyckades.');
 		$_SESSION['username'] = $username;
-		$_SESSION['password'] = $password;
+		$_SESSION['userAgent'] = $userAgent;
+		// $_SESSION['password'] = $password;
 		return true;
+	}
+
+	private function rememberUser($username) {
+		$expiration = time()+(60*60*24*30);
+		$token = $this->createToken($username, $expiration);
+		$this->accountDAL->rememberUser($token, $username, $expiration);
+		$this->token = $token;
+		$this->tokenExpiration = $expiration;
+	}
+
+	private function createToken($username, $expiration) {
+		return crypt($username, $expiration . 'secret string appended to make it harder to calculate');
 	}
 }

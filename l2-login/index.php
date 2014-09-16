@@ -9,6 +9,7 @@ session_start();
 require_once('src/app/account/account.model.php');
 require_once('src/app/account/account.controller.php');
 require_once('src/app/account/account.view.php');
+require_once('src/app/account/account.dal.php');
 require_once('src/components/response/response.php');
 require_once('src/components/cookie/cookie.service.php');
 require_once('src/components/notify/notify.service.php');
