@@ -41,20 +41,26 @@ class AccountController {
 		}
 
 		if ($this->view->didLogin()) {
+			$this->view->redirect();
 			if ($this->validateLogin()) {
+				echo 'post';
 				return $this->view->loggedIn();
 			}
 		}
 
 		if ($this->model->isLoggedIn($this->view->getUserAgent())) {
+			echo 'session';
 			return $this->view->loggedIn();
 		}
 
 		if ($this->view->getToken() != '') {
 			$token = $this->view->getToken();
 			
-			if ($this->model->validateToken($token)) {
+			if ($this->model->validateToken($token, $this->view->getUserAgent())) {
+				echo 'token';
 				return $this->view->loggedIn();
+			} else {
+				$this->view->removeToken();
 			}
 		}
 

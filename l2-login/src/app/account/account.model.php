@@ -27,26 +27,28 @@ class AccountModel {
 	}
 
 	public function IsLoggedIn($userAgent) {
-		if (!isset($_SESSION['username'])) { // || !isset($_SESSION['password'])) {
+		if (!isset($_SESSION['username'])) {
 			return false;
 		}
 
 		$username = $_SESSION['username'];
-		// $password = $_SESSION['password'];
-		if ($username == $this->adminUsername && $_SESSION['userAgent'] == $userAgent) { // && $password == $this->adminPassword) {
+		if ($username == $this->adminUsername && $_SESSION['userAgent'] == $userAgent) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public function validateToken($token) {
+	public function validateToken($token, $userAgent) {
 		$result = $this->accountDAL->findRememberedUser($token);
 		if ($result != false) {
 			$_SESSION['username'] = $result;
+			$_SESSION['userAgent'] = $userAgent;
+			$this->notify->success('Inloggning lyckades via cookies.');
 			return true;
 		}
 		
+		$this->notify->error('Felaktig information i cookie.');
 		return false;
 	}
 
@@ -68,12 +70,13 @@ class AccountModel {
 
 		if ($remember == true) {
 			$this->rememberUser($username);
+			$this->notify->success('Inloggning lyckades och vi kommer ihåg dig nästa gång.');
+		} else {
+			$this->notify->success('Inloggning lyckades.');
 		}
 
-		$this->notify->success('Inloggning lyckades.');
 		$_SESSION['username'] = $username;
 		$_SESSION['userAgent'] = $userAgent;
-		// $_SESSION['password'] = $password;
 		return true;
 	}
 

@@ -15,10 +15,11 @@ require_once('src/components/cookie/cookie.service.php');
 require_once('src/components/notify/notify.service.php');
 require_once('src/components/notify/notification.php');
 
+$cookieService = new CookieService();
 $response = new Response();
 $notify = new Notify();
 $model = new AccountModel($notify);
-$view = new AccountView($model);
+$view = new AccountView($model, $cookieService);
 $controller = new AccountController($model, $view);
 
 $response->HTMLPage($controller->index(), $notify);

@@ -43,13 +43,17 @@ class AccountView {
 		}
 	}
 
+	public function removeToken() {
+		$this->cookieService->remove('token');
+	}
+
 	public function getUserAgent() {
 		return $_SERVER['HTTP_USER_AGENT'];
 	}
 
-	public function __construct($model) {
+	public function __construct($model, $cookieService) {
 		$this->model = $model;
-		$this->cookieService = new CookieService();
+		$this->cookieService = $cookieService;
 	}
 
 	public function didLogin() {
@@ -69,8 +73,8 @@ class AccountView {
 		}
 	}
 
-	public function redirect($location) {
-		header('Location: ' . $location);
+	public function redirect() {
+		header('Location: ' . $_SERVER['PHP_SELF']);
 	}
 
 	public function login() {

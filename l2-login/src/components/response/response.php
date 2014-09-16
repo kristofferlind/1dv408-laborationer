@@ -16,7 +16,11 @@ class Response {
 			throw new Exception('HTMLView::echoHTML does not allow body to be null');
 		}
 
-		$notifications = $notify->getAll();
+		$notifications = '';
+		var_dump($_SERVER['REQUEST_METHOD'] === 'GET');
+		if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+			$notifications = $notify->getAll();
+		}
 
 		$date = $this->customDate();
 		
