@@ -21,6 +21,8 @@ class CookieService {
 			$ret = '';
 		}
 
+		// $this->remove($name);
+
 		return $ret;
 	}
 

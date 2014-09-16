@@ -7,6 +7,7 @@ class AccountView {
 
 	public function getUsername() {
 		if (isset($_POST['username'])) {
+			$this->cookieService->save('username', $_POST['username']);
 			return $_POST['username'];
 		}
 		
@@ -14,7 +15,7 @@ class AccountView {
 	}
 
 	public function getPassword() {
-		if (isset($_POST['password'])) {
+		if (isset($_POST['password']) && $_POST['password'] != '') {
 			return $password = crypt($_POST['password'], $this->getUsername());
 		}
 
@@ -78,11 +79,11 @@ class AccountView {
 	}
 
 	public function login() {
-		$username = '';
+		$username = $this->cookieService->load('username');;
 
-		if (isset($_POST['username'])) {
-			$username = $_POST['username'];
-		}
+		// if (isset($_POST['username'])) {
+		// 	$username = $_POST['username'];
+		// }
 
 		$body = "
 				<h1>L2 - Login [kl222jy]</h1>

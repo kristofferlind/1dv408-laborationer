@@ -1,35 +1,26 @@
 <?php
 
-/*
-Notification = {type, message}
-type: error, success, info, warning
- */
-
 class Notify {
-	private $notifications;
 
 	public function __construct() {
-		$this->notifications = $_SESSION['notifications'];
+		$this->prepareArray();
 	}
 
 	private function clearArray() {
-		unset($notifications);
+		unset($_SESSION['notifications']);
 		$this->prepareArray();
 	}
 
 	private function prepareArray() {
-		$notifications = array();
-		$_SESSION['notifications'] = $notifications;
-		$this->notifications = $_SESSION['notifications'];
+		if (!isset($_SESSION['notifications']) || !is_array($_SESSION['notifications'])) {
+			$_SESSION['notifications'] = array();
+		}
 	}
 
 	private function create($type, $header, $message) {
-		if (!is_array($this->notifications)) {
-			$this->prepareArray();
-		}
-
 		$notification = new Notification($type, $header, $message);
-		array_push($this->notifications, $notification);
+		$notification = serialize($notification);
+		$_SESSION['notifications'][] = $notification;
 	}
 
 	public function error($message, $header = 'Misslyckades!') {
@@ -44,18 +35,17 @@ class Notify {
 		$this->create('success', $header, $message);
 	}
 
-
 	public function getAll() {
 		$builtNotifications = '';
 
-		if (is_array($this->notifications)) {
-			foreach ($this->notifications as $notification) {
+		if (count($_SESSION['notifications']) > 0) {
+			foreach ($_SESSION['notifications'] as $notification) {
+				$notification = unserialize($notification);
 				$builtNotifications .= $this->buildNotification($notification);
 			}
+	
+			$this->clearArray();
 		}
-
-		var_dump($this->notifications);
-		$this->clearArray();
 
 		return $builtNotifications;
 	}

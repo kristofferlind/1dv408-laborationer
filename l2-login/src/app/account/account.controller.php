@@ -15,9 +15,9 @@ class AccountController {
 	//validate login
 	private function validateLogin() {
 		//Make sure username and password exists
-		if ($this->view->getUsername() == '' || $this->view->getPassword() == '') {
-			return false;
-		}
+		// if ($this->view->getUsername() == '' || $this->view->getPassword() == '') {
+		// 	return false;
+		// }
 
 		$username = $this->view->getUsername();
 		$password = $this->view->getPassword();
@@ -37,19 +37,18 @@ class AccountController {
 
 	public function index() {
 		if ($this->view->didLogout()) {
+			// $this->view->redirect();
 			$this->model->logOut();
 		}
 
 		if ($this->view->didLogin()) {
 			$this->view->redirect();
 			if ($this->validateLogin()) {
-				echo 'post';
 				return $this->view->loggedIn();
 			}
 		}
 
 		if ($this->model->isLoggedIn($this->view->getUserAgent())) {
-			echo 'session';
 			return $this->view->loggedIn();
 		}
 
@@ -57,7 +56,6 @@ class AccountController {
 			$token = $this->view->getToken();
 			
 			if ($this->model->validateToken($token, $this->view->getUserAgent())) {
-				echo 'token';
 				return $this->view->loggedIn();
 			} else {
 				$this->view->removeToken();
