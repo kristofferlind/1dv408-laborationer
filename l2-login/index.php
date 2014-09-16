@@ -1,7 +1,5 @@
 <?php
 
-//This only works as intended in internet explorer
-//js would be an option, but it seems like an odd solution
 session_set_cookie_params(0);
 session_start();
 
@@ -13,13 +11,15 @@ require_once('src/app/account/account.dal.php');
 require_once('src/components/response/response.php');
 require_once('src/components/cookie/cookie.service.php');
 require_once('src/components/notify/notify.service.php');
+require_once('src/components/notify/notify.view.php');
 require_once('src/components/notify/notification.php');
 
 $cookieService = new CookieService();
 $response = new Response();
 $notify = new Notify();
+$notifyView = new NotifyView($notify);
 $model = new AccountModel($notify);
 $view = new AccountView($model, $cookieService);
 $controller = new AccountController($model, $view);
 
-$response->HTMLPage($controller->index(), $notify);
+$response->HTMLPage($controller->index(), $notifyView);

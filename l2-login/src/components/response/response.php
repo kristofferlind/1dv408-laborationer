@@ -1,25 +1,28 @@
 <?php
 
+//Manages server responses (html, json?)
 class Response {
 
-	//Funktionen ger fel sträng, %e skulle ge rätt, men då blir det ingen utdata alls.
+	//Should use %e instead of %d, but i get no ouput at all using that..
 	private function customDate() {
 		setlocale(LC_ALL, 'swedish');
 		// setlocale(LC_ALL, 'sv_SE.UTF-8');
 
-		return utf8_encode(ucfirst(strftime('%A, den %d %B %Y. '))) . strftime('Klockan är [%H:%M:%S].'); //%e pajar allt.. 
-		// return ucfirst(strftime('%A, den %d %B %Y. ')) . strftime('Klockan är [%H:%M:%S].'); //%e pajar allt.. 
+		return utf8_encode(ucfirst(strftime('%A, den %d %B %Y. '))) . strftime('Klockan är [%H:%M:%S].');
+		// return ucfirst(strftime('%A, den %d %B %Y. ')) . strftime('Klockan är [%H:%M:%S].');
 	}
 
-	public function HTMLPage($body, $notify) {
+	//Renders html page
+	public function HTMLPage($body, $notifyView) {
 		if ($body === NULL) {
 			throw new Exception('HTMLView::echoHTML does not allow body to be null');
 		}
 
 		$notifications = '';
 
+		//Don't fetch notifications on post, these pages should never be shown
 		if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-			$notifications = $notify->getAll();
+			$notifications = $notifyView->showAll();
 		}
 
 		$date = $this->customDate();

@@ -14,17 +14,13 @@ class AccountController {
 
 	//validate login
 	private function validateLogin() {
-		//Make sure username and password exists
-		// if ($this->view->getUsername() == '' || $this->view->getPassword() == '') {
-		// 	return false;
-		// }
-
 		$username = $this->view->getUsername();
 		$password = $this->view->getPassword();
-
 		$remember = $this->view->getRemember();
 
+		//Check if credentials are correct
 		if ($this->model->validateCredentials($username, $password, $remember, $this->view->getUserAgent())) {
+			//Should we remember user?
 			if ($remember) {
 				$this->view->remember();
 			}
@@ -36,25 +32,34 @@ class AccountController {
 	}
 
 	public function index() {
+		//Did user click logout?
 		if ($this->view->didLogout()) {
-			// $this->view->redirect();
+			//Log user out
 			$this->model->logOut();
 		}
 
+		//Did user click login?
 		if ($this->view->didLogin()) {
+			//Get rid of post request
 			$this->view->redirect();
+
+			//Validate credentials (post)
 			if ($this->validateLogin()) {
+				//Show logged in page
 				return $this->view->loggedIn();
 			}
 		}
 
+		//Is user already logged in? (session)
 		if ($this->model->isLoggedIn($this->view->getUserAgent())) {
 			return $this->view->loggedIn();
 		}
 
+		//Check for token (cookie)
 		if ($this->view->getToken() != '') {
 			$token = $this->view->getToken();
 			
+			//Check if token is correct
 			if ($this->model->validateToken($token, $this->view->getUserAgent())) {
 				return $this->view->loggedIn();
 			} else {

@@ -5,8 +5,10 @@ class AccountView {
 	private $model;
 	public $cookieService;
 
+	//Get username from post
 	public function getUsername() {
 		if (isset($_POST['username'])) {
+			//Save username in cookie to remember input
 			$this->cookieService->save('username', $_POST['username']);
 			return $_POST['username'];
 		}
@@ -14,6 +16,7 @@ class AccountView {
 		return '';
 	}
 
+	//Get password from post
 	public function getPassword() {
 		if (isset($_POST['password']) && $_POST['password'] != '') {
 			return $password = crypt($_POST['password'], $this->getUsername());
@@ -22,6 +25,7 @@ class AccountView {
 		return '';
 	}
 
+	//Remember user?
 	public function getRemember() {
 		if (isset($_POST['remember'])) {
 			return $_POST['remember'];
@@ -30,12 +34,14 @@ class AccountView {
 		}
 	}
 
+	//Remember user, sets cookie with token and expiration
 	public function remember() {
 		$token = $this->model->token;
 		$expiration = $this->model->tokenExpiration;
 		$this->cookieService->saveToken($token, $expiration);
 	}
 
+	//Get token from cookie
 	public function getToken() {
 		if ($this->cookieService->load('token') != '') {
 			return $this->cookieService->load('token');
@@ -44,10 +50,12 @@ class AccountView {
 		}
 	}
 
+	//Remove token, remove on fail
 	public function removeToken() {
 		$this->cookieService->remove('token');
 	}
 
+	//Get client browser info
 	public function getUserAgent() {
 		return $_SERVER['HTTP_USER_AGENT'];
 	}
@@ -57,6 +65,7 @@ class AccountView {
 		$this->cookieService = $cookieService;
 	}
 
+	//Did user request login?
 	public function didLogin() {
 		if (isset($_POST['login'])) {
 			return true;
@@ -65,6 +74,7 @@ class AccountView {
 		}
 	}
 
+	//Did user request to be logged out?
 	public function didLogout() {
 		if (isset($_GET['action']) && $_GET['action'] == 'logout') {
 			$this->cookieService->remove('token');
@@ -74,16 +84,14 @@ class AccountView {
 		}
 	}
 
+	//Redirect, to get rid of post
 	public function redirect() {
 		header('Location: ' . $_SERVER['PHP_SELF']);
 	}
 
+	//Page: login, page for logging in
 	public function login() {
-		$username = $this->cookieService->load('username');;
-
-		// if (isset($_POST['username'])) {
-		// 	$username = $_POST['username'];
-		// }
+		$username = $this->cookieService->load('username'); //username || ''
 
 		$body = "
 				<h1>L2 - Login [kl222jy]</h1>
@@ -105,6 +113,7 @@ class AccountView {
 		return $body;
 	}
 
+	//Page: logged in, page for logged in user
 	public function loggedIn() {
 		$body = "
 			<h1>L2 - Login [kl222jy]</h1>
