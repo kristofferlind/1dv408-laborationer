@@ -10,24 +10,25 @@ class CookieService {
 		setcookie( self::$cookieName . '::token', $token, $expiration);
 	}
 
+	public function loadToken() {
+		return $_COOKIE[self::$cookieName . '::token'];
+	}
+
 	//Save cookie
 	public function save($name, $string) {
-		$_COOKIE[self::$cookieName . '::' . $name] = $string;
 		setcookie( self::$cookieName . '::' . $name, $string, time()+(60*60*24*30));
 	}
 
 	//Load cookie
 	public function load($name) {
-		if (isset($_COOKIE[self::$cookieName . '::' . $name])) {
-			$ret = $_COOKIE[self::$cookieName . '::' . $name];
-		}
-		else {
-			$ret = '';
+		if (!isset($_COOKIE[self::$cookieName . '::' . $name])) {
+			return '';
 		}
 
-		// $this->remove($name);
+		$value = $_COOKIE[self::$cookieName . '::' . $name];
+		$this->remove($name);
 
-		return $ret;
+		return $value;
 	}
 
 	//Remove cookie, dead code?

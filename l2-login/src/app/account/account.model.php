@@ -21,6 +21,14 @@ class AccountModel {
 		$this->accountDAL = new AccountDAL();
 	}
 
+	public function getUsername() {
+		if (isset($_SESSION['username'])) {
+			return $_SESSION['username'];
+		} else {
+			return '';
+		}
+	}
+
 	public function logout() {
 		session_destroy();
 		session_start();

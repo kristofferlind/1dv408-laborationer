@@ -43,8 +43,8 @@ class AccountView {
 
 	//Get token from cookie
 	public function getToken() {
-		if ($this->cookieService->load('token') != '') {
-			return $this->cookieService->load('token');
+		if ($this->cookieService->loadToken() != '') {
+			return $this->cookieService->loadToken();
 		} else {
 			return '';
 		}
@@ -115,9 +115,14 @@ class AccountView {
 
 	//Page: logged in, page for logged in user
 	public function loggedIn() {
+		$username = $this->cookieService->load('username');
+		if (!$username) {
+			$username = $this->model->getUsername();
+		}
+
 		$body = "
 			<h1>L2 - Login [kl222jy]</h1>
-			<h2>Admin är inloggad</h2>
+			<h2>$username är inloggad</h2>
 			<a href='?action=logout'>Logga ut</a>";
 		
 		return $body;
