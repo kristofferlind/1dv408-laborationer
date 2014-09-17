@@ -11,6 +11,9 @@ class CookieService {
 	}
 
 	public function loadToken() {
+		if (!isset($_COOKIE[self::$cookieName . '::token'])) {
+			return '';
+		}
 		return $_COOKIE[self::$cookieName . '::token'];
 	}
 
