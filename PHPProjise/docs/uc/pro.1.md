@@ -6,8 +6,8 @@
 **Preconditions:** User authenticated  
 **Postconditions:** Project created  
 **Main success scenario:**  
-1. User chooses to create project
-2. System asks for details
-3. User submits details
-4. System saves project and presents updated list of projects
-**Extensions:**
+1. User chooses to create project  
+2. System asks for details  
+3. User submits details  
+4. System saves project and presents updated list of projects  
+**Extensions:**  

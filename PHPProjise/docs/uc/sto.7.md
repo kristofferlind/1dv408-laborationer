@@ -6,6 +6,6 @@
 **Preconditions:** User authenticated, Story being worked on by user  
 **Postconditions:** Story marked as done  
 **Main success scenario:**  
-1. User chooses to mark story as done
-2. System updates story, setting it as being done
-**Extensions:**
+1. User chooses to mark story as done  
+2. System updates story, setting it as being done  
+**Extensions:**  

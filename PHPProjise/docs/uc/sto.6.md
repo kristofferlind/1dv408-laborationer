@@ -6,6 +6,6 @@
 **Preconditions:** User authenticated, Story being worked on by user  
 **Postconditions:** Story marked as not being worked on  
 **Main success scenario:**  
-1. User chooses to cancel work on story
-2. System updates story, setting it as not being worked on
-**Extensions:**
+1. User chooses to cancel work on story  
+2. System updates story, setting it as not being worked on  
+**Extensions:**  
