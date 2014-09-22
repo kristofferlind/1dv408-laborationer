@@ -1,0 +1,52 @@
+Testfall 1.1
+ok
+
+Testfall 1.2 - logga in utan uppgifter
+ok
+
+Testfall 1.3 - logga in med bara användarnamn
+ok
+
+Tesfall 1.4 - logga in med enbart lösen
+ok
+
+Testfall 1.5 - logga in med fel uppgifter
+ok
+
+Testfall 1.7 - logga in med Admin/Password
+ok
+
+Testfall 1.8 - refresh efter 1.7
+ok
+
+Testfall 2.1 - logga ut
+ok
+
+Testfall 2.2 - utloggad efter att stängt browsern
+ok
+
+Tesfall 2.3 - logga ut och refresha
+ok
+
+Testfall 2.4 - utlogging påverkar andra flikar
+ok
+
+
+Testfall 3.1 - inlogging med håll-mig-inloggad
+ok
+
+Testfall 3.2 - håll-mig-inloggad medelande försvinner efter refresh
+ok
+
+Testfall 3.3 - inlogging med hjälp av cookie
+ok
+
+Testfall 3.4 - misslyckas om kakan ändrats
+ok
+
+Testfall 3.5 - använd inte gamla kakor
+ok
+
+Testfall 3.6 - kopiera kaka till annan webbläsare
+ok
+
