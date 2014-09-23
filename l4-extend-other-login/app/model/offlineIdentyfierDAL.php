@@ -1,7 +1,5 @@
 <?php
 
-namespace Model;
-
 require_once(realpath(dirname(__FILE__)."/databaseHandler.php" ));
 require_once(realpath(dirname(__FILE__)."/userDAL.php" ));
 

@@ -1,9 +1,5 @@
 <?php
 
-namespace Model;
-
-
-
 require_once(realpath(dirname(__FILE__)."/constants/consts.php" ));
 
 // ok dont look too closely at this code. Its something i put togeather from old code. 
@@ -30,7 +26,7 @@ class DatabaseHandler{
 
 		if (DatabaseHandler::$conn == null) {
 			try {
-				DatabaseHandler::$conn = new \PDO(DatabaseHandler::$connectionString, c_Con_User, c_Con_PW);
+				DatabaseHandler::$conn = new PDO(DatabaseHandler::$connectionString, c_Con_User, c_Con_PW);
 				
 				//echo "<p>Connected to ".c_Con_DB." at ".c_Con_Host." successfully.</p>";
 

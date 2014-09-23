@@ -1,7 +1,5 @@
 <?php
 
-namespace Controller;
-
 require_once(realpath(dirname(__FILE__)."/../view/loginView.php"));
 
 
@@ -49,10 +47,63 @@ class LoginCtrl{
 		}
 	}
 
+	public function doRegisterAttempt($view) {
+		$register = $view->getRegisterData();
+		$correct = true;
+		$notify = $this->model->notify;
+
+		if (!$register) {
+			return $view->registerView();
+		}
+
+		if ($register['pw'] != $register['pw2']) {
+			$notify->error('Lösenorden matchar inte');
+			$correct = false;
+		}
+		
+		if (preg_match("/^[a-zA-Z0-9]+$/", $register['name']) === 0 && strlen($register['name']) != 0) {
+			$notify->error('Användarnamnet innehåller ogiltiga tecken.');
+			$name = $register['name'];
+			$name = filter_var($name, FILTER_SANITIZE_STRING);
+			$view->lastUsername = preg_replace("/[^a-zA-Z0-9]/i", "", $name);
+			$correct = false;
+		}
+
+		if (strlen($register['name']) < 3) {
+			$notify->error('Användarnamnet har för få tecken. Minst 3 tecken.');
+			$correct = false;
+		}
+
+		if (strlen($register['pw']) < 6) {
+			$notify->error('Lösenordet har för få tecken. Minst 6 tecken.');
+			$correct = false;
+		}
+
+		if ($correct) {
+			$registerStatus = $this->model->register($register);
+			if ($registerStatus !== true) {
+				$notify->error($registerStatus);
+			} else {
+				$notify->success('Registrering av ny användare lyckades.');
+				return $view->renderView();
+			}
+		}
+
+		return $view->registerView();
+	}
+
 	public function doControll(){
 
-		$view = new \View\LoginView($this->model);
+		$view = new LoginView($this->model);
 		$authenticated = false;
+
+		if ($view->didRegister()) {
+			return $this->doRegisterAttempt($view);
+		}
+
+		if ($view->wantsToRegister()) {
+			return $view->registerView();
+		}
 
 		// there is a current user for this browser ==> user is already loged in 
 		if($this->model->getCurrentUser($view->getBrowserDesc()) !== null ) {

@@ -1,7 +1,5 @@
 <?php
 
-namespace Model;
-
 require_once(realpath(dirname(__FILE__)."/databaseHandler.php" ));
 
 // user object stored in db
@@ -51,5 +49,16 @@ class UserDAL{
 		$foundUser->pw = $row->pwhash;
 
 		return $foundUser;
+	}
+
+	public function createUser($register) {
+		$user = new User();
+		$user->setFromArray($register);
+		try {
+			$this->store($user);
+		} catch(Exception $e) {
+			return false;
+		}
+		return true;
 	}
 }

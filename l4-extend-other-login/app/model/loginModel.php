@@ -1,7 +1,5 @@
 <?php
 
-namespace Model;
-
 require_once(realpath(dirname(__FILE__)."/sessionObjects.php" ));
 require_once(realpath(dirname(__FILE__)."/userDAL.php" ));
 require_once(realpath(dirname(__FILE__)."/offlineIdentyfierDAL.php" ));
@@ -11,6 +9,7 @@ class LoginModel{
 	private $usersDAL;
 	private $offlineIdentyfierDAL;
 	private $sessionService;
+	public $notify;
 	const session_currUser = 'LoginModel::current_user';
 	const session_flash = 'LoginModel::flash_memory';
 
@@ -92,9 +91,24 @@ class LoginModel{
 		return true;
 	}
 
-	public function __construct($sessionService, $usersDAL, $offlineIdentyfierDAL) {
+	public function __construct($sessionService, $usersDAL, $offlineIdentyfierDAL, $notifyService) {
 		$this->offlineIdentyfierDAL = $offlineIdentyfierDAL;
 		$this->usersDAL = $usersDAL;//  = new UserDAL($filePath);
 		$this->sessionService = $sessionService; //new SessionService();
+		$this->notify = $notifyService;
+	}
+
+	public function register($register) {
+		$foundUser = $this->usersDAL->retrieveUserByName($register['name']);
+		if ($foundUser !== null) {
+			return 'Användarnamnet är uppptaget.';
+		}
+
+		$tryCreateUser = $this->usersDAL->createUser($register);
+		if ($tryCreateUser) {
+			return true;
+		} else {
+			return 'Ett oförutsett fel inträffade, kontakta admin.';
+		}
 	}
 }

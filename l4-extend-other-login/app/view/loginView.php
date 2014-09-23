@@ -1,7 +1,5 @@
 <?php
 
-namespace View;
-
 require_once(realpath(dirname(__FILE__)."/../model/loginModel.php"));
 
 class LoginView{
@@ -13,7 +11,8 @@ class LoginView{
 	private $getToken_logout = "logout"; // $_POST['name']
 	private $getToken_keepSession = "keep_session";
 	private $cookie_LoginCookie = "LoginCookie";
-	private $lastUsername = "";
+	public $lastUsername = "";
+	private $notify;
 
 	// check if enough info has been suported to the page
 	private function validateForm(){
@@ -92,6 +91,18 @@ class LoginView{
 		return $creds;
 	}
 
+	public function getRegisterData() {
+		if (!isset($_POST['name']) || !isset($_POST['pw']) || !isset($_POST['pw2'])) {
+			return;
+		}
+		$this->lastUsername = $_POST['name'];
+		$register = array();
+		$register['name'] = $_POST['name'];
+		$register['pw'] = $_POST['pw'];
+		$register['pw2'] = $_POST['pw2'];
+		return $register;
+	}
+
 	// used by Cookie login
 	public function getCookieLoginCredentials(){
 		$creds = array();
@@ -105,10 +116,27 @@ class LoginView{
 		die();
 	}
 
+	public function wantsToRegister() {
+		if (isset($_GET['create'])) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
+	public function didRegister() {
+		if (isset($_GET['register'])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public function __construct($inModel) {
 		$this->model = $inModel;
 		$this->title = "Laboration, inte inloggad";
 		$this->setFlashText("");
+		$this->notify = new NotifyView($this->model->notify);
 	}
 
 	public function makeLoginForm($currentUser){
@@ -118,18 +146,18 @@ class LoginView{
 				<fieldset><legend>Login - skriv användarnamn och lösenord </legend>
 					<div>$this->flashMessage</div>
 					<label for='name'>Namn</label>
-					<input type='text' name='name' placeholder='namn' value='$this->lastUsername'/>
+					<input id='name' type='text' name='name' placeholder='namn' value='$this->lastUsername'/>
 
 					<label for='pw'>Password</label>
-					<input type='text' name='pw' placeholder='***' value=''/>
+					<input id='pw' type='password' name='pw' placeholder='***' value=''/>
 
 					<label for='keep_session'>Håll mig inloggad</label>
-					<input type='checkbox' name='keep_session' value='your_value'>
+					<input id='keep_session' type='checkbox' name='keep_session' value='your_value'>
 
 					<input type='submit' value='Logga in'>
 				</fieldset>
 				</div>
-				</form>";
+				</form><hr>";
 
 		if($currentUser !== null) $form = ""; // no login-form if there is a loged in user
 
@@ -183,13 +211,17 @@ class LoginView{
 	}
 
 	public function renderView(){
+		$notifications = $this->notify->showAll();
 		$viewHTML = "<!doctype html>
 			<html>
 				<head>
 					<meta charset='UTF-8'>
 					<title>$this->title</title>
+					<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
 				</head>
 			<body>
+				<div class='container'>
+				<p>$notifications</p>
 				<h1>Labborationskod kg222dy</h1>";
 
 		$currentUser = $this->model->getCurrentUser($this->getBrowserDesc());
@@ -199,7 +231,53 @@ class LoginView{
 		$viewHTML .= $this->displayTheLink($currentUser);
 		$viewHTML .= $this->makeLoginForm($currentUser);
 		$viewHTML .= $this->displayTime();
-		$viewHTML .= '</body></html>';
+		$viewHTML .= "</div>
+				<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+				<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'></script>
+
+		</body></html>";
+
+		return $viewHTML;
+	}
+
+	public function registerView() {
+		$notifications = $this->notify->showAll();
+		$displayTime = $this->displayTime();
+		$viewHTML = "
+		<!doctype html>
+		<html>
+			<head>
+				<meta charset='UTF-8'>
+				<title>$this->title</title>
+				<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+			</head>
+			<body>
+				<div class='container'>
+				<p>$notifications</p>
+				<h1>Labborationskod kg222dy</h1>
+				<a href='index.php'>Tillbaka</a>
+				<h2>Ej inloggad, Registrera användare</h2>
+				<form method='post' action='?register'>
+				<fieldset><legend>Registrera ny användare - Skriv in användarnamn och lösenord</legend>
+					<label for='name'>Namn</label>
+					<input id='name' type='text' name='name' placeholder='namn' value='$this->lastUsername'/><br />
+
+					<label for='pw'>Lösenord</label>
+					<input id='pw' type='password' name='pw' placeholder='***' value=''/><br />
+
+					<label for='pw2'>Repetera lösenord</label>
+					<input id='pw2' type='password' name='pw2' placeholder='***' value=''/><br />
+
+					<input type='submit' value='Registrera'>
+				</fieldset>
+				</form>
+				<hr>
+				$displayTime
+				</div>
+				<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+				<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'></script>
+			</body>
+		</html>";
 
 		return $viewHTML;
 	}

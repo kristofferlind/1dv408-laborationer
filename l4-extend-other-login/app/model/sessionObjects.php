@@ -1,7 +1,5 @@
 <?php
 
-namespace Model;
-
 // an object ment to store info about the loged in user
 class CurrentUser{
 	public $name;

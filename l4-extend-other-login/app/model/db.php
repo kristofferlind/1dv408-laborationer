@@ -1,7 +1,5 @@
 <?php
 
-namespace Spela;
-
 require_once(realpath(dirname(__FILE__)."/conststants/consts.php" ));
 
 
