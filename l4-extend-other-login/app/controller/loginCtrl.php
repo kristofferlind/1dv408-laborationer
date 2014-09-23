@@ -44,6 +44,7 @@ class LoginCtrl{
 			$view->reloadPage("?login");
 		} else {
 			$view->setFlashText('Felaktigt information i cookie');
+			$view->removeIdentifier();
 		}
 	}
 
@@ -60,7 +61,7 @@ class LoginCtrl{
 			$notify->error('Lösenorden matchar inte');
 			$correct = false;
 		}
-		
+
 		if (preg_match("/^[a-zA-Z0-9]+$/", $register['name']) === 0 && strlen($register['name']) != 0) {
 			$notify->error('Användarnamnet innehåller ogiltiga tecken.');
 			$name = $register['name'];

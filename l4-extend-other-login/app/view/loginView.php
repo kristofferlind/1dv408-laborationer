@@ -74,6 +74,10 @@ class LoginView{
 		return false;
 	}
 
+	public function removeIdentifier() {
+		setcookie ($this->cookie_LoginCookie, "", time() - 3600); 
+	}
+
 	public function setFlashText($msg){
 		$this->flashMessage = $msg;
 	}
