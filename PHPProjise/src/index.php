@@ -4,7 +4,7 @@ session_set_cookie_params(0);
 session_start();
 
 //This is a bit ridiculous, autoloader?
-require_once('settings.php');
+require_once('config/settings.php');
 require_once('components/base/base.model.php');
 require_once('components/base/base.controller.php');
 require_once('components/base/base.view.php');
