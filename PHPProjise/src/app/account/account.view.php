@@ -22,10 +22,5 @@ class AccountView extends BaseView {
 		}
 
 		return '';
-	}	
-
-	//Redirect, to get rid of post
-	public function redirect($location) {
-		header('Location: ' . $location);
 	}
 }

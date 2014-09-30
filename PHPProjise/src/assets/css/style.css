@@ -1,4 +1,4 @@
-main {
+body {
 	margin-top: 50px;
 	padding-top: 10px;
 }
@@ -55,4 +55,12 @@ main {
 }
 .alert {
     z-index: 101;
+}
+td.actions {
+    width: 80px;
+    align: right;
+}
+
+.toolbar {
+    float: right;
 }

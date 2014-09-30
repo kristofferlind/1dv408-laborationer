@@ -9,6 +9,7 @@ class AccountRegisterController extends BaseController {
 		$username = $this->view->getUsername();
 		$password = $this->view->getPassword();
 		$confirmPassword = $this->view->getConfirmPassword();
+		$userAgent = $this->view->getUserAgent();
 		$correct = true;
 
 		if ($password != $confirmPassword) {
@@ -35,7 +36,7 @@ class AccountRegisterController extends BaseController {
 		}
 
 		if ($correct) {
-			$registerStatus = $this->model->tryRegister($username, $password);
+			$registerStatus = $this->model->tryRegister($username, $password, $userAgent);
 			if ($registerStatus === true) {
 				$notify->success('User was successfully created.');
 				$this->view->redirect('?section=account&page=index');

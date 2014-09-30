@@ -2,20 +2,21 @@
 
 class AccountRegisterModel extends BaseModel {
 	private $accountDAL;
-	public function validateCredentials($username, $password, $remember, $userAgent) {
-		$user = $this->accountDAL->retrieveUserByCredentials($username, $password);
-		if ($user === null) {
-			$this->notify->error('Username and/or password were incorrect.');
+
+	public function tryRegister($username, $password, $userAgent) {
+		$existingUser = $this->accountDAL->retrieveUserByName($username);
+		if ($existingUser !== null) {
+			return 'Username is already in use, please choose another.';
+		}
+		$user = new User($username, $password, $userAgent);
+		$registeredUser = $this->accountDAL->createUser($user);
+
+		if ($registeredUser) {
+			return true;
+		} else {
+			$this->notify->error('Something went wrong.');
 			return false;
 		}
-
-		$this->notify->success('Login was successful.');
-		$_SESSION['user'] = $user;
-		return true;
-	}
-
-	public function tryRegister($username, $password) {
-		return 'Not implemented yet.';
 	}
 
 	public function __construct() {

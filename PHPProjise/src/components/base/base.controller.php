@@ -1,30 +1,43 @@
 <?php
 
-//maybe have?
-//notify
-//response->htmlpage method?
-
-//should have
-//sessionservice
-//cookieservice
 class BaseController {
 	protected $page;
 	protected $action;
+	protected $id;
 
 	public function __construct() {
 		$view = new BaseView();
 		$this->page = $view->getPage();
 		$this->action = $view->getAction();
-		// if (isset($_GET['page'])) {
-		// 	$this->page = $_GET['page'];
-		// } else {
-		// 	$this->page = 'index';
-		// }
-		// if (isset($_GET['action'])) {
-		// 	$this->action = $_GET['action'];
-		// } else {
-		// 	$this->action = 'index';
-		// }
-			
+		$this->id = $view->getId();
+		$auth = new AuthenticationModel();
+
+		$token = $view->getToken();
+		$userAgent = $view->getUserAgent();
+		$section = $view->getSection();
+		$page = $view->getPage();
+				
+		if ($auth->isLoggedIn()) {
+			if ($section === 'account' && $page === 'index') {
+				//..then redirect to projectlist
+				$view->redirect('?section=project&page=index');
+			}
+		}
+
+		//Does token exist?
+		if ($token !== '') {
+			$loggedIn = $auth->tryLoadFromToken($token, $userAgent);
+			//Did login with cookie work?
+			if ($loggedIn) {
+				//Was requested page the login page?
+				if ($section === 'account' && $page === 'index') {
+					//..then redirect to projectlist
+					$view->redirect('?section=project&page=index');
+				}
+			} else {
+				//Login with cookie failed, remove cookie
+				$view->removeToken();
+			}
+		}
 	}
 }

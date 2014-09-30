@@ -23,7 +23,51 @@ class BaseView {
 		return $action;
 	}
 
+	public function getId() {
+		if (isset($_GET['id'])) {
+			$action = $_GET['id'];
+		} else {
+			$action = 'index';
+		}
+
+		return $action;
+	}
+
+	public function getSection() {
+		if (isset($_GET['section'])) {
+			$section = $_GET['section'];
+		} else {
+			$section = 'account';
+		}
+
+		return $section;
+	}
+
+	//Get token from cookie
+	public function getToken() {
+		if ($this->cookieService->loadToken() != '') {
+			return $this->cookieService->loadToken();
+		} else {
+			return '';
+		}
+	}
+
+	//Remove token, remove on fail
+	public function removeToken() {
+		$this->cookieService->remove('token');
+	}
+
 	public function __construct() {
 		$this->cookieService = new CookieService();
+	}
+
+	//Redirect, to get rid of post
+	public function redirect($location) {
+		header('Location: ' . $location);
+	}
+
+	//Get client browser info
+	public function getUserAgent() {
+		return $_SERVER['HTTP_USER_AGENT'];
 	}
 }

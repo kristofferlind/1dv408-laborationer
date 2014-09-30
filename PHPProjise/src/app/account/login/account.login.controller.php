@@ -14,7 +14,9 @@ class AccountLoginController extends BaseController {
 		if ($this->model->validateCredentials($username, $password, $remember, $userAgent)) {
 			//Should we remember user?
 			if ($remember) {
-				$this->view->remember();
+				$token = $this->model->getToken();
+				$expiration = $this->model->getExpiration();
+				$this->view->remember($token, $expiration);
 			}
 
 			return true;
