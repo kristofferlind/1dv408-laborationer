@@ -17,7 +17,9 @@ class ProjectEditController extends AuthenticationController {
 			$updateProject['projectId'] = $projectId;
 			$isUpdated = $this->model->updateProject($updateProject);
 			if ($isUpdated) {
-				//redirect to list
+				$this->view->redirect('?section=project&page=list');
+			} else {
+				$this->view->redirect("?section=project&page=edit&id=$projectId");
 			}
 		}
 

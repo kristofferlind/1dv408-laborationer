@@ -25,12 +25,10 @@ class BaseView {
 
 	public function getId() {
 		if (isset($_GET['id'])) {
-			$action = $_GET['id'];
+			return $_GET['id'];
 		} else {
-			$action = 'index';
+			return null;
 		}
-
-		return $action;
 	}
 
 	public function getSection() {

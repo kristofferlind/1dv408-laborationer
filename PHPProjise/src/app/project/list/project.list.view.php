@@ -12,25 +12,46 @@ class ProjectListView extends BaseView {
 		return $formData;
 	}
 
-	private function generateTable($projects) {
-		$table = "<table class='table table-hover'><tr><td>Name</td><td>Description</td><td>Actions</td></tr>";
+	private function generateTable($projects, $activeProjectId) {
+		$table = "
+				<table class='table table-hover'>
+					<tr>
+						<th>Name</th>
+						<th>Description</th>
+						<th>Actions</th>
+					</tr>";
 		foreach ($projects as $project) {
-			$table .= $this->generateRow($project);
+			$table .= $this->generateRow($project, $activeProjectId);
 		}
 		$table .= "</table>";
 
 		return $table;
 	}
 
-	private function generateRow($project) {
+	private function generateRow($project, $activeProjectId) {
 		$name = $project->name;
 		$description = $project->description;
 		$projectId = $project->projectId;
+		
+		if ($project->projectId !== $activeProjectId) {
+			$activeClass = "";
+			$activateButton = "
+						<a href='?section=project&page=index&action=activate&id=$projectId'>
+							<button type='button' class='btn btn-success btn-xs'>
+								<span class='glyphicon glyphicon-ok'></span>
+							</button>
+						</a> ";
+		} else {
+			$activeClass = "class= 'success'";
+			$activateButton = '';
+		}
+
 		$row = "
-				<tr>
+				<tr $activeClass>
 					<td>$name</td>
 					<td>$description</td>
 					<td class='actions'>
+						$activateButton
 						<a href='?section=project&page=edit&id=$projectId'>
 							<button type='button' class='btn btn-primary btn-xs'>
 								<span class='glyphicon glyphicon-pencil'></span>
@@ -47,7 +68,8 @@ class ProjectListView extends BaseView {
 		return $row;
 	}
 
-	public function index($projects) {
+	public function index($projects, $model) {
+		$activeProjectId = $model->getActiveProject();
 		$createProjectForm = "
 							<form action='?section=project&page=index&action=create' method='post'>
 								<div class='form-group'>
@@ -74,14 +96,14 @@ class ProjectListView extends BaseView {
 									</div>
 								</div>
 							</div>";
-		$table = $this->generateTable($projects);
+		$table = $this->generateTable($projects, $activeProjectId);
 		return "
 				<div class='toolbar'>
 					<button type='button' class='btn btn-success' data-toggle='modal' data-target='#create-project'>
 						<span class='glyphicon glyphicon-plus-sign'></span> Create project
 					</button>
 				</div>
-				<h1>Projects <small>shows your projects</small></h1>
+				<h1>Projects <small>manage projects</small></h1>
 				$table
 				$createProjectModal";
 	}

@@ -8,6 +8,7 @@ class User {
 	public $token;
 	public $salt;
 	public $expiration;
+	public $activeProject;
 
 	public function __construct($username, $password, $userAgent, $salt = '', $userId = '', $isFromDB = false, $token = '', $expiration = '') {
 		if ($isFromDB) {

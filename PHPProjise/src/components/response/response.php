@@ -57,7 +57,7 @@ class Response {
 		$navigation = $this->RenderNav();
 
 		//Don't fetch notifications on post, these pages should never be shown
-		if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+		if ($_SERVER['REQUEST_METHOD'] == 'GET' && $body !== '') {
 			$notifications = $notifyView->showAll();
 		}
 

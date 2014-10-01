@@ -71,11 +71,18 @@ class ProjectModel extends BaseModel {
 		$isUpdated = $this->projectDAL->updateProject($updateProject);
 
 		if ($isUpdated) {
+			$this->notify->success('Project successfully updated.');
 			return true;
 		} else {
 			$this->notify->error('Failed to update project.');
 			return false;
 		}
+	}
+
+	public function activateProject($projectId) {
+		$user = $_SESSION['user'];
+		$user->activeProject = $projectId;
+		$_SESSION['user'] = $user;
 	}
 
 	public function __construct() {

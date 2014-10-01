@@ -14,6 +14,10 @@ class ProjectListController extends AuthenticationController {
 			$this->view->redirect('?section=project&page=index');
 		}
 
+		if ($action === 'activate') {
+			$this->model->activateProject($id);
+		}
+
 		// if ($action === 'edit') {
 		// 	$this->view->redirect('?section=project&page=edit&id=$id');
 		// 	return '';
@@ -31,6 +35,6 @@ class ProjectListController extends AuthenticationController {
 
 		$projects = $this->model->getProjects();
 
-		return $this->view->index($projects);
+		return $this->view->index($projects, $this->model);
 	}
 }

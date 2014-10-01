@@ -22,12 +22,13 @@ class AccountRegisterView extends AccountView {
 	}
 
 	public function index() {
+		$username = $this->getUsername();
 		return "
 				<div class='backdrop'>
 					<section class='form-signin'>
 					    <form role='form' method='post'>
 		        			<h2 class='form-signin-heading'>Register</h2>
-		        			<input type='text' name='username' class='form-control' placeholder='Username' required autofocus>
+		        			<input value='$username' type='text' name='username' class='form-control' placeholder='Username' required autofocus>
 				        	<input type='password' name='confirmPassword' class='form-control' placeholder='Password' required>
 				        	<input type='password' name='password' class='form-control' placeholder='Confirm password' required>
 				        	<label class='checkbox' name='remember'>

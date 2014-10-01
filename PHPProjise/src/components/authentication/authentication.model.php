@@ -4,11 +4,12 @@
 class AuthenticationModel extends BaseModel {
 
 	private $userDAL;
+	public $user;
 
 	//Called from BaseController so any requested url can try to log in using cookie
 	//Tries to log in user using token
 	public function tryLoadFromToken($token, $userAgent) {
-		if (isset($_SESSION['user'])) {
+		if (isset($_SESSION['user']->userId)) {
 			return true;
 		}
 
@@ -32,7 +33,8 @@ class AuthenticationModel extends BaseModel {
 	}
 
 	public function isLoggedIn() {
-		if (isset($_SESSION['user'])) {
+		if (isset($_SESSION['user']->userId)) {
+			$this->user = $_SESSION['user'];
 			return true;
 		} else {
 			return false;

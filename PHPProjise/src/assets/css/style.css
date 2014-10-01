@@ -56,9 +56,12 @@ body {
 .alert {
     z-index: 101;
 }
+th.actions {
+    text-align: center;
+}
 td.actions {
-    width: 80px;
-    align: right;
+    width: 130px;
+    text-align: right;
 }
 
 .toolbar {

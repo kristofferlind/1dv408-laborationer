@@ -35,6 +35,14 @@ require_once('app/project/edit/project.edit.controller.php');
 require_once('app/project/edit/project.edit.view.php');
 require_once('app/project/list/project.list.controller.php');
 require_once('app/project/list/project.list.view.php');
+require_once('app/story/story.controller.php');
+require_once('app/story/story.model.php');
+require_once('app/story/story.dal.php');
+require_once('app/story/story.php');
+require_once('app/story/list/story.list.controller.php');
+require_once('app/story/list/story.list.view.php');
+require_once('app/story/edit/story.edit.controller.php');
+require_once('app/story/edit/story.edit.view.php');
 
 session_set_cookie_params(0);
 session_start();
@@ -49,10 +57,9 @@ if (isset($_GET['section'])) {
 		case 'project':
 			$controller = new ProjectController();
 			break;
-		// Not implemented yet, structure might change while doing project
-		// case 'story':
-		// 	$controller = new StoryController();
-		// 	break;
+		case 'story':
+			$controller = new StoryController();
+			break;
 		default:
 			$controller = new AccountController();
 	}
