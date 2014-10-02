@@ -53,7 +53,7 @@ Tests done 2/10-14
  - [x] Request any section sends user to login if not authed
 
 ##Setup
-- [ ] Automatic setup of database if nonexistant
+- [ ] Automatic setup of database if nonexistant - Skip?
 
 ##UI
  - [x] Description fields should be textarea

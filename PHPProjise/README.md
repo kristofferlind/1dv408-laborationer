@@ -3,6 +3,9 @@
 A very simple php version of (https://github.com/kristofferlind/projise).
 Only project and story management, no realtime updates.
 
+##Demo
+Executable demo available at: (http://krad.se/temp/1dv408/project/)
+
 ##Installation
 * Set environment variables in config/settings.php
 * Create database with the name you set in settings
