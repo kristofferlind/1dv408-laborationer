@@ -67,3 +67,8 @@ td.actions {
 .toolbar {
     float: right;
 }
+
+textarea {
+    resize: vertical;
+    max-height: 400px;
+}

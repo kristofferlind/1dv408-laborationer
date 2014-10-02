@@ -19,7 +19,7 @@ class CookieService {
 
 	//Save cookie
 	public function save($name, $string) {
-		setcookie( self::$cookieName . '::' . $name, $string, time()+(60*60*24*30));
+		setcookie( self::$cookieName . '::' . $name, $string, time()+30);
 	}
 
 	//Load cookie

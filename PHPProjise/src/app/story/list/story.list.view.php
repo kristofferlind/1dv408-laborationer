@@ -8,8 +8,8 @@ class StoryListView extends BaseView {
 
 	public function getCreateFormData() {
 		$formData = array();
-		$formData['name'] = $_POST['name'];
-		$formData['description'] = $_POST['description'];
+		$formData['name'] = htmlspecialchars($_POST['name']);
+		$formData['description'] = htmlspecialchars($_POST['description']);
 		return $formData;
 	}
 
@@ -37,26 +37,26 @@ class StoryListView extends BaseView {
 		switch ($story->storyStatusId) {
 			case 1: 
 				return "<a href='?section=story&page=index&action=work&id=$storyId'>
-							<button type='button' class='btn btn-success btn-xs'>
+							<button data-toggle='tooltip' title='Work on story' type='button' class='btn btn-success btn-xs'>
 								<span class='glyphicon glyphicon-ok'></span>
 							</button>
 						</a>";
 				break;
 			case 2:
 				return "<a href='?section=story&page=index&action=finish&id=$storyId'>
-							<button type='button' class='btn btn-success btn-xs'>
+							<button data-toggle='tooltip' title='Cancel work on story' type='button' class='btn btn-success btn-xs'>
 								<span class='glyphicon glyphicon-thumbs-up'></span>
 							</button>
 						</a>
 						<a href='?section=story&page=index&action=cancel&id=$storyId'>
-							<button type='button' class='btn btn-warning btn-xs'>
+							<button data-toggle='tooltip' title='Finish story' type='button' class='btn btn-warning btn-xs'>
 								<span class='glyphicon glyphicon-thumbs-down'></span>
 							</button>
 						</a>";
 				break;
 			case 3:
 				return "<a href='?section=story&page=index&action=work&id=$storyId'>
-							<button type='button' class='btn btn-warning btn-xs'>
+							<button data-toggle='tooltip' title='Work on story' type='button' class='btn btn-warning btn-xs'>
 								<span class='glyphicon glyphicon-thumbs-down'></span>
 							</button>
 						</a>";
@@ -77,12 +77,12 @@ class StoryListView extends BaseView {
 					<td class='actions'>
 						$setStatusButton
 						<a href='?section=story&page=edit&id=$storyId'>
-							<button type='button' class='btn btn-primary btn-xs'>
+							<button data-toggle='tooltip' title='Edit story' type='button' class='btn btn-primary btn-xs'>
 								<span class='glyphicon glyphicon-pencil'></span>
 							</button>
 						</a>
 						<a href='?section=story&page=index&action=delete&id=$storyId'>
-							<button type='button' class='btn btn-danger btn-xs'>
+							<button data-toggle='tooltip' title='Delete story' type='button' class='btn btn-danger btn-xs'>
 								<span class='glyphicon glyphicon-trash'></span>
 							</button>
 						</a>
@@ -97,16 +97,16 @@ class StoryListView extends BaseView {
 							<form action='?section=story&page=index&action=create' method='post'>
 								<div class='form-group'>
 									<label for='create-story-name'>Name</label>
-									<input type='text' class='form-control' id='create-story-name' name='name' placeholder='Story name'>
+									<input autofocus required maxlength='50' type='text' class='form-control' id='create-story-name' name='name' placeholder='Story name'>
 								</div>
 								<div class='form-group'>
 									<label for='create-story-description'>Description</label>
-									<input type='text' class='form-control' id='create-story-description' name='description' placeholder='Story description'>
+									<textarea required maxlength='250' type='text' class='form-control' id='create-story-description' name='description' placeholder='Story description'></textarea>
 								</div>
 								<button type='submit' class='btn btn-primary' name='create'>Create</button>
 							</form>";
 		$createStoryModal = "
-							<div class='modal fade' id='create-story' tabindex='-1'>
+							<div class='modal fade' id='create-story'>
 								<div class='modal-dialog'>
 									<div class='modal-content'>
 										<div class='modal-header'>

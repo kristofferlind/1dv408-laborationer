@@ -27,10 +27,6 @@ require_once('app/project/project.php');
 require_once('app/project/project.controller.php');
 require_once('app/project/project.model.php');
 require_once('app/project/project.dal.php');
-require_once('app/project/create/project.create.controller.php');
-require_once('app/project/create/project.create.view.php');
-require_once('app/project/delete/project.delete.controller.php');
-require_once('app/project/delete/project.delete.view.php');
 require_once('app/project/edit/project.edit.controller.php');
 require_once('app/project/edit/project.edit.view.php');
 require_once('app/project/list/project.list.controller.php');
@@ -43,6 +39,7 @@ require_once('app/story/list/story.list.controller.php');
 require_once('app/story/list/story.list.view.php');
 require_once('app/story/edit/story.edit.controller.php');
 require_once('app/story/edit/story.edit.view.php');
+require_once('config/install.php');
 
 session_set_cookie_params(0);
 session_start();
@@ -51,6 +48,10 @@ $baseController = new BaseController();
 
 if (isset($_GET['section'])) {
 	switch ($_GET['section']) {
+		case 'install':
+			//not really a controller..
+			$controller = new Install();
+			break;
 		case 'account':
 			$controller = new AccountController();
 			break;

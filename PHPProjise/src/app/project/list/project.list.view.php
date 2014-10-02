@@ -7,8 +7,8 @@ class ProjectListView extends BaseView {
 
 	public function getCreateFormData() {
 		$formData = array();
-		$formData['name'] = $_POST['name'];
-		$formData['description'] = $_POST['description'];
+		$formData['name'] = htmlspecialchars($_POST['name']);
+		$formData['description'] = htmlspecialchars($_POST['description']);
 		return $formData;
 	}
 
@@ -37,7 +37,7 @@ class ProjectListView extends BaseView {
 			$activeClass = "";
 			$activateButton = "
 						<a href='?section=project&page=index&action=activate&id=$projectId'>
-							<button type='button' class='btn btn-success btn-xs'>
+							<button data-toggle='tooltip' title='Activate project' type='button' class='btn btn-success btn-xs'>
 								<span class='glyphicon glyphicon-ok'></span>
 							</button>
 						</a> ";
@@ -53,12 +53,12 @@ class ProjectListView extends BaseView {
 					<td class='actions'>
 						$activateButton
 						<a href='?section=project&page=edit&id=$projectId'>
-							<button type='button' class='btn btn-primary btn-xs'>
+							<button data-toggle='tooltip' title='Edit project' type='button' class='btn btn-primary btn-xs'>
 								<span class='glyphicon glyphicon-pencil'></span>
 							</button>
 						</a>
 						<a href='?section=project&page=index&action=delete&id=$projectId'>
-							<button type='button' class='btn btn-danger btn-xs'>
+							<button data-toggle='tooltip' title='Delete project' type='button' class='btn btn-danger btn-xs'>
 								<span class='glyphicon glyphicon-trash'></span>
 							</button>
 						</a>
@@ -74,16 +74,16 @@ class ProjectListView extends BaseView {
 							<form action='?section=project&page=index&action=create' method='post'>
 								<div class='form-group'>
 									<label for='create-project-name'>Name</label>
-									<input type='text' class='form-control' id='create-project-name' name='name' placeholder='Project name'>
+									<input autofocus required maxlength='50' type='text' class='form-control' id='create-project-name' name='name' placeholder='Project name'>
 								</div>
 								<div class='form-group'>
 									<label for='create-project-description'>Description</label>
-									<input type='text' class='form-control' id='create-project-description' name='description' placeholder='Project description'>
+									<textarea required maxlength='250' type='text' class='form-control' id='create-project-description' name='description' placeholder='Project description'></textarea>
 								</div>
 								<button type='submit' class='btn btn-primary' name='create'>Create</button>
 							</form>";
 		$createProjectModal = "
-							<div class='modal fade' id='create-project' tabindex='-1'>
+							<div class='modal fade' id='create-project'>
 								<div class='modal-dialog'>
 									<div class='modal-content'>
 										<div class='modal-header'>

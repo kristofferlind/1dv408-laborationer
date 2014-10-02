@@ -16,6 +16,9 @@ class ProjectModel extends BaseModel {
 	public function createProject($projectData) {
 		$user = $_SESSION['user'];
 		$project = new Project($projectData);
+		if (!$this->validateProject($project)) {
+			return false;
+		}
 		$createdProject = $this->projectDAL->addProject($project, $user->userId);
 
 		if ($createdProject === null) {
@@ -68,6 +71,11 @@ class ProjectModel extends BaseModel {
 
 	public function updateProject($project) {
 		$updateProject = new Project($project);
+
+		if (!$this->validateProject($updateProject)) {
+			return false;
+		}
+
 		$isUpdated = $this->projectDAL->updateProject($updateProject);
 
 		if ($isUpdated) {
@@ -83,6 +91,28 @@ class ProjectModel extends BaseModel {
 		$user = $_SESSION['user'];
 		$user->activeProject = $projectId;
 		$_SESSION['user'] = $user;
+	}
+
+	public function validateProject(Project $project) {
+		$valid = true;
+		if (!$project->name) {
+			$this->notify->error('Project name is missing.');
+			$valid = false;
+		}
+		if (strlen($project->name) >= 50) {
+			$this->notify->error('Project name is too long, maximum 50.');
+			$valid = false;
+		}
+		if (!$project->description) {
+			$this->notify->error('Project description is missing.');
+			$valid = false;
+		}
+		if (strlen($project->name) >= 250) {
+			$this->notify->error('Project description is too long, maximum 250.');
+			$valid = false;
+		}
+
+		return $valid;
 	}
 
 	public function __construct() {

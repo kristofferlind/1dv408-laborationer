@@ -15,7 +15,7 @@ class StoryController extends AuthenticationController {
 		if ($activeProject) {
 			$this->activeProject = $activeProject;
 		} else {
-			$this->projectModel->notify->error('You need to have an active project to view stories.');
+			$this->projectModel->notify->info('You need to have an active project to view stories.');
 			$view->redirect('?section=project&page=index');
 			return '';
 		}

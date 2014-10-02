@@ -12,6 +12,12 @@ class BaseModel {
 		}
 	}
 
+	public function logout() {
+		session_destroy();
+		session_start();
+		$this->notify->info('You are now logged out.');
+	}
+
 	public function __construct() {
 		$this->notify = new Notify();
 	}

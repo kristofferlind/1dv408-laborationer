@@ -24,7 +24,10 @@ class Response {
 	private function RenderNav() {
 		$project = $this->renderNavLink('Project');
 		$story = $this->renderNavLink('Story');
-
+		$logout = '';
+		if (isset($_GET['section']) && $_GET['section'] !== 'account') {
+			$logout = "<li><a href='?section=project&action=logout'>Logout</a></li>";
+		}
 		return "
 		    <nav class='navbar navbar-inverse navbar-fixed-top' role='navigation'>
 		      	<div class='container'>
@@ -41,6 +44,7 @@ class Response {
 		          		<ul class='nav navbar-nav'>
 		            		$project
 		            		$story
+		            		$logout
 		          		</ul>
 		        	</div>
 		      	</div>
@@ -80,6 +84,7 @@ class Response {
 				</div>
 				<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
 				<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'></script>
+				<script src='assets/js/body.js'></script>
 			</body>
 			</html>";
 	}

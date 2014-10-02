@@ -34,11 +34,13 @@ class StoryListController extends AuthenticationController {
 		if ($this->view->didCreate()) {
 			$createData = $this->view->getCreateFormData();
 			$isCreated = $this->model->createStory($createData);
+			$this->view->redirect('?section=story&page=index');
 			if (!$isCreated) {
 				//show create view with errors and remembered values?
 				//or just present that it failed?
 				//might also remember data in this form
 			}
+			return '';
 		}
 
 		$stories = $this->model->getStories($projectId);

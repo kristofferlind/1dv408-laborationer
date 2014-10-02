@@ -2,6 +2,7 @@
 
 class ProjectController extends AuthenticationController {
 	public function index() {
+
 		switch ($this->page) {
 			case 'index':
 				$controller = new ProjectListController();

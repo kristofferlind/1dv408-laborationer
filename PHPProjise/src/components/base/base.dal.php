@@ -16,6 +16,7 @@ abstract class BaseDAL {
 				$this->connection = new PDO($this->connectionString, Settings::$username, Settings::$password);
 				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			} catch (PDOException $e) {
+				// die('Something went wrong.');
 				die($e);
 			}
 		}

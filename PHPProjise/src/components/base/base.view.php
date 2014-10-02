@@ -5,7 +5,7 @@ class BaseView {
 
 	public function getPage() {
 		if (isset($_GET['page'])) {
-			$page = $_GET['page'];
+			$page = htmlspecialchars($_GET['page']);
 		} else {
 			$page = 'index';
 		}
@@ -15,7 +15,7 @@ class BaseView {
 
 	public function getAction() {
 		if (isset($_GET['action'])) {
-			$action = $_GET['action'];
+			$action = htmlspecialchars($_GET['action']);
 		} else {
 			$action = 'index';
 		}
@@ -25,7 +25,7 @@ class BaseView {
 
 	public function getId() {
 		if (isset($_GET['id'])) {
-			return $_GET['id'];
+			return htmlspecialchars($_GET['id']);
 		} else {
 			return null;
 		}
@@ -33,7 +33,7 @@ class BaseView {
 
 	public function getSection() {
 		if (isset($_GET['section'])) {
-			$section = $_GET['section'];
+			$section = htmlspecialchars($_GET['section']);
 		} else {
 			$section = 'account';
 		}
@@ -44,7 +44,7 @@ class BaseView {
 	//Get token from cookie
 	public function getToken() {
 		if ($this->cookieService->loadToken() != '') {
-			return $this->cookieService->loadToken();
+			return htmlspecialchars($this->cookieService->loadToken());
 		} else {
 			return '';
 		}

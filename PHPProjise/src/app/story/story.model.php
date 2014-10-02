@@ -50,6 +50,9 @@ class StoryModel extends BaseModel {
 			return false;
 		}
 		$story = new Story($storyData);
+		if (!$this->validateStory($story)) {
+			return false;
+		}
 		$isCreated = $this->storyDAL->createStory($story, $projectId);
 
 		if (!$isCreated) {
@@ -104,6 +107,9 @@ class StoryModel extends BaseModel {
 	public function updateStory($story) {
 		$projectId = $_SESSION['user']->activeProject;
 		$updateStory = new Story($story);
+		if (!$this->validateStory($updateStory)) {
+			return false;
+		}
 		$isUpdated = $this->storyDAL->updateStory($updateStory, $projectId);
 
 		if ($isUpdated) {
@@ -120,6 +126,28 @@ class StoryModel extends BaseModel {
 		if (!$isUpdated) {
 			$this->notify->error('Could not change status');
 		}
+	}
+
+	public function validateStory(Story $story) {
+		$valid = true;
+		if (!$story->name) {
+			$this->notify->error('Story name is missing.');
+			$valid = false;
+		}
+		if (strlen($story->name) >= 50) {
+			$this->notify->error('Story name is too long, maximum 50.');
+			$valid = false;
+		}
+		if (!$story->description) {
+			$this->notify->error('Story description is missing.');
+			$valid = false;
+		}
+		if (strlen($story->name) >= 250) {
+			$this->notify->error('Story description is too long, maximum 250.');
+			$valid = false;
+		}
+
+		return $valid;
 	}
 
 	public function __construct() {
