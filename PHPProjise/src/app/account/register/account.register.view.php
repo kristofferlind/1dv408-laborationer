@@ -1,6 +1,7 @@
 <?php
 
 class AccountRegisterView extends AccountView {
+	//Does user want to register an account?
 	public function didRegister() {
 		if (isset($_POST['register'])) {
 			return true;
@@ -9,6 +10,7 @@ class AccountRegisterView extends AccountView {
 		}
 	}
 
+	//Get the confirm password from registration form
 	public function getConfirmPassword() {
 		if (isset($_POST['confirmPassword'])) {
 			return $_POST['confirmPassword'];
@@ -17,6 +19,7 @@ class AccountRegisterView extends AccountView {
 		return '';
 	}
 
+	//Remember username in case form is shown again
 	public function setUsername($username) {
 		$this->cookieService->save('username', $username);
 	}

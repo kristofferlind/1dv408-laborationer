@@ -6,15 +6,17 @@ class StoryController extends AuthenticationController {
 	public function __construct() {
 		parent::__construct();
 		$this->projectModel = new ProjectModel();
-
 	}
 
+	//Acts as router for story pages (a bit unnecessary since there's only 2 routes now.. planned on 4)
 	public function index() {
 		$view = new BaseView();
 		$activeProject = $this->projectModel->getActiveProject();
+		//Make sure user has an active project
 		if ($activeProject) {
 			$this->activeProject = $activeProject;
 		} else {
+			//Otherwise send user to projects
 			$this->projectModel->notify->info('You need to have an active project to view stories.');
 			$view->redirect('?section=project&page=index');
 			return '';
@@ -23,14 +25,8 @@ class StoryController extends AuthenticationController {
 			case 'index':
 				$controller = new StoryListController();
 				return $controller->index();
-			case 'create':
-				$controller = new StoryCreateController();
-				return $controller->index();
 			case 'edit':
 				$controller = new StoryEditController();
-				return $controller->index();
-			case 'delete':
-				$controller = new StoryDeleteController();
 				return $controller->index();
 		}
 

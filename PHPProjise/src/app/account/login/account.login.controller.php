@@ -4,6 +4,7 @@ class AccountLoginController extends BaseController {
 	private $view;
 	private $model;
 	
+	//Validates login from login page
 	private function validateLogin() {
 		$username = $this->view->getUsername();
 		$password = $this->view->getPassword();

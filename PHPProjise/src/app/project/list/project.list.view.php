@@ -1,10 +1,12 @@
 <?php
 
 class ProjectListView extends BaseView {
+	//Does user want to create project?
 	public function didCreate() {
 		return isset($_POST['create']);
 	}
 
+	//Fetch project creation form data
 	public function getCreateFormData() {
 		$formData = array();
 		$formData['name'] = htmlspecialchars($_POST['name']);
@@ -12,6 +14,7 @@ class ProjectListView extends BaseView {
 		return $formData;
 	}
 
+	//Generate table from projectlist
 	private function generateTable($projects, $activeProjectId) {
 		$table = "
 				<table class='table table-hover'>
@@ -28,11 +31,13 @@ class ProjectListView extends BaseView {
 		return $table;
 	}
 
+	//Generate tablerow
 	private function generateRow($project, $activeProjectId) {
 		$name = $project->name;
 		$description = $project->description;
 		$projectId = $project->projectId;
 		
+		// Check if this project is the furrent project
 		if ($project->projectId !== $activeProjectId) {
 			$activeClass = "";
 			$activateButton = "
@@ -42,7 +47,7 @@ class ProjectListView extends BaseView {
 							</button>
 						</a> ";
 		} else {
-			$activeClass = "class= 'success'";
+			$activeClass = "class='success'";
 			$activateButton = '';
 		}
 

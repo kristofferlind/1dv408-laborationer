@@ -3,6 +3,7 @@
 //Manages server responses (html, json?)
 class Response {
 
+	//Checks if link is active
 	private function isActive($section) {
 		$section = strtolower($section);
 		if (!isset($_GET['section'])) {
@@ -15,12 +16,14 @@ class Response {
 		}
 	}
 
+	//Renders links for menu
 	private function renderNavLink($section) {
 		$isActive = $this->isActive($section);
 		$hrefTag = strtolower($section);
 		return "<li $isActive><a href='?section=$hrefTag'>$section</a></li>";
 	}
 
+	//Renders menu
 	private function RenderNav() {
 		$project = $this->renderNavLink('Project');
 		$story = $this->renderNavLink('Story');

@@ -21,6 +21,7 @@ class StoryListController extends AuthenticationController {
 			return '';
 		}
 
+		//These should probably use an enum instead
 		if ($action === 'work') {
 			$this->model->setStatus($projectId, $id, 2);
 		}
@@ -31,6 +32,7 @@ class StoryListController extends AuthenticationController {
 			$this->model->setStatus($projectId, $id, 3);
 		}
 
+		//Does user want to create story?
 		if ($this->view->didCreate()) {
 			$createData = $this->view->getCreateFormData();
 			$isCreated = $this->model->createStory($createData);

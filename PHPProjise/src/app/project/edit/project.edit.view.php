@@ -1,12 +1,15 @@
 <?php
 
 class ProjectEditView extends BaseView {
+	//Does user want to update?
 	public function didUpdate() {
 		return isset($_POST['update']);
 	}
 
+	//Fetch formdata from edit form
 	public function getEditProjectFormData() {
 		$projectData = array();
+		//Encode input 
 		$projectData['name'] = htmlspecialchars($_POST['name']);
 		$projectData['description'] = htmlspecialchars($_POST['description']);
 		return $projectData;		

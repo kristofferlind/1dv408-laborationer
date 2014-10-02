@@ -1,10 +1,12 @@
 <?php
 
 class StoryEditView extends BaseView {
+	//Does user want to update story?
 	public function didUpdate() {
 		return isset($_POST['update']);
 	}
 
+	//Fetch formdata from edit form
 	public function getEditStoryFormData() {
 		$storyData = array();
 		$storyData['name'] = htmlspecialchars($_POST['name']);
@@ -12,6 +14,7 @@ class StoryEditView extends BaseView {
 		return $storyData;		
 	}
 
+	//Story edit view
 	public function index($story) {
 		$id = $story->storyId;
 		$name = $story->name;

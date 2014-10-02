@@ -4,23 +4,31 @@ class ProjectModel extends BaseModel {
 
 	private $projectDAL;
 
+	//Fetch projects user is part of
 	public function getProjects() {
 		$user = $_SESSION['user'];
 		$projects = $this->projectDAL->getProjectsByUserId($user->userId);
+
+		//Is user part of any project?
 		if ($projects === null) {
 			return false;
 		}
 		return $projects;
 	}
 
+	//Create project
 	public function createProject($projectData) {
 		$user = $_SESSION['user'];
 		$project = new Project($projectData);
+
+		//Validate
 		if (!$this->validateProject($project)) {
 			return false;
 		}
+
 		$createdProject = $this->projectDAL->addProject($project, $user->userId);
 
+		//Did creation fail?
 		if ($createdProject === null) {
 			$this->notify->error('Failed to create project.');
 			return false;
@@ -34,26 +42,31 @@ class ProjectModel extends BaseModel {
 		$user = $_SESSION['user'];
 		$isPartOf = $this->projectDAL->checkUserIsPartOfProject($user->userId, $projectId);
 		
+		//Is user part of project?
 		if (!$isPartOf) {
 			$this->notify->error('You cannot delete a project you are not a member of.');
 			return false;
 		}
 		
-		//delete project
+		//Delete project
 		$isDeleted = $this->projectDAL->deleteProject($projectId);
 
+		//Did deletion fail?
 		if (!$isDeleted) {
 			$this->notify->error("Couldn't delete project.");
 			return false;
 		}
 
+		//Deletion successful
 		return true;
 	}
 
+	//Fetch project
 	public function getProject($projectId) {
 		$user = $_SESSION['user'];
 		$isPartOf = $this->projectDAL->checkUserIsPartOfProject($user->userId, $projectId);
 
+		//Make sure user is part of project
 		if (!$isPartOf) {
 			$this->notify->error('You cannot edit a project you are not a member of.');
 			return false;
@@ -61,6 +74,7 @@ class ProjectModel extends BaseModel {
 
 		$foundProject = $this->projectDAL->getProject($projectId);
 
+		//No project found?
 		if (!$foundProject) {
 			$this->notify->error('Could not find project.');
 			return false;
@@ -69,6 +83,7 @@ class ProjectModel extends BaseModel {
 		return $foundProject;
 	}
 
+	//Update project
 	public function updateProject($project) {
 		$updateProject = new Project($project);
 
@@ -76,8 +91,10 @@ class ProjectModel extends BaseModel {
 			return false;
 		}
 
+		//Try to update
 		$isUpdated = $this->projectDAL->updateProject($updateProject);
 
+		//Was update successful?
 		if ($isUpdated) {
 			$this->notify->success('Project successfully updated.');
 			return true;
@@ -87,12 +104,16 @@ class ProjectModel extends BaseModel {
 		}
 	}
 
+	//Set active project
 	public function activateProject($projectId) {
 		$user = $_SESSION['user'];
 		$user->activeProject = $projectId;
 		$_SESSION['user'] = $user;
 	}
 
+	//Validate project (should probably be in Project)
+	//name should exist and be at most 50chars
+	//description should exist and be at most 250chars
 	public function validateProject(Project $project) {
 		$valid = true;
 		if (!$project->name) {

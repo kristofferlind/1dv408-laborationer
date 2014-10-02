@@ -2,6 +2,7 @@
 
 class UserDAL extends BaseDAL {
 
+	//Should really be renamed, every other operation of this type is called get
 	public function retrieveUserByCredentials(User $loginUser) {
 		$db = $this->connection();
 		$sql = 'SELECT * FROM users WHERE username = :username AND password = :password';
@@ -19,6 +20,7 @@ class UserDAL extends BaseDAL {
 		return $returnUser;
 	}
 
+	//Fetch user by name
 	public function retrieveUserByName($username) {
 		$db = $this->connection();
 		$sql = 'SELECT * FROM users WHERE username = :username';
@@ -36,6 +38,7 @@ class UserDAL extends BaseDAL {
 		return $returnUser;
 	}
 
+	//Fetch user by token (cookie login)
 	public function retrieveUserByToken($token) {
 		$db = $this->connection();
 		$sql = 'SELECT * FROM users WHERE token = :token';
@@ -53,6 +56,7 @@ class UserDAL extends BaseDAL {
 		return $returnUser;
 	}
 
+	//Create user
 	public function createUser(User $user) {
 		$db = $this->connection();
 		$sql = 'INSERT INTO users (username, password, salt, userAgent, token, expiration) VALUES (:username, :password, :salt, :userAgent, :token, :expiration)';
@@ -67,6 +71,7 @@ class UserDAL extends BaseDAL {
 		return $user;
 	}
 
+	//Make user object
 	private function createUserObject($user) {
 		return new User($user->username, $user->password, $user->userAgent, $user->salt, $user->userId, true, $user->token, $user->expiration);
 	}

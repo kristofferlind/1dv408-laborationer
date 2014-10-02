@@ -4,6 +4,7 @@ class AccountRegisterController extends BaseController {
 	private $view;
 	private $model;
 
+	//Create account (register)
 	private function tryRegister() {
 		$notify = $this->model->notify;
 		$username = $this->view->getUsername();
@@ -12,21 +13,25 @@ class AccountRegisterController extends BaseController {
 		$userAgent = $this->view->getUserAgent();
 		$correct = true;
 
+		//Validation should be moved to model
 		if ($password != $confirmPassword) {
 			$notify->error('Passwords do not match.');
 			$correct = false;
 		}
 
+		//Username should be at least 3 chars
 		if (strlen($username) < 3) {
 			$notify->error('Username is too short, should be atleast 3 characters.');
 			$correct = false;
 		}
 
+		//Password should be atleast 6 chars
 		if (strlen($password) < 6) {
 			$notify->error('Password is too short, should be atleast 6 characters.');
 			$correct = false;
 		}
 
+		//Username should have no illegal characters
 		if (preg_match("/^[a-zA-Z0-9]+$/", $username) === 0 && strlen($username) != 0) {
 			$notify->error('Username contains illegal characters ([a-zA-Z0-9] allowed).');
 			$name = $username;
@@ -36,8 +41,11 @@ class AccountRegisterController extends BaseController {
 			$correct = false;
 		}
 
+
 		if ($correct) {
+			//Try to register user
 			$registerStatus = $this->model->tryRegister($username, $password, $userAgent);
+
 			if ($registerStatus === true) {
 				$notify->success('User was successfully created.');
 				$this->view->redirect('?section=account&page=index');
@@ -48,6 +56,7 @@ class AccountRegisterController extends BaseController {
 				return '';
 			}
 		} else {
+			//Validation failed, reload register page
 			$this->view->redirect('?section=account&page=register');
 			return '';
 		}
@@ -57,10 +66,13 @@ class AccountRegisterController extends BaseController {
 		$this->view = new AccountRegisterView();
 		$this->model = new AccountRegisterModel();
 
+		//Did user request account registration?
 		if ($this->view->didRegister()) {
+			//Try to register account
 			$this->tryRegister();
 		}
 
+		//Show default view
 		return $this->view->index();
 	}
 }

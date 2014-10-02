@@ -2,10 +2,12 @@
 
 class StoryListView extends BaseView {
 	
+	//Does user want to create a story?
 	public function didCreate() {
 		return isset($_POST['create']);
 	}
 
+	//Fetch form data from create story form
 	public function getCreateFormData() {
 		$formData = array();
 		$formData['name'] = htmlspecialchars($_POST['name']);
@@ -13,6 +15,7 @@ class StoryListView extends BaseView {
 		return $formData;
 	}
 
+	//Generate table of stories
 	private function generateTable($stories) {
 		if (!$stories) {
 			return '';
@@ -32,6 +35,7 @@ class StoryListView extends BaseView {
 		return $table;
 	}
 
+	//Generate status buttons based on status (should use enum)
 	private function generateSetStatusButton($story) {
 		$storyId = $story->storyId;
 		switch ($story->storyStatusId) {
@@ -64,6 +68,7 @@ class StoryListView extends BaseView {
 		}
 	}
 
+	//Generate row for table
 	private function generateRow($story) {
 		$name = $story->name;
 		$description = $story->description;

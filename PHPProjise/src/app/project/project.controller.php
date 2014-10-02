@@ -1,5 +1,6 @@
 <?php
 
+//Acts as router for project section
 class ProjectController extends AuthenticationController {
 	public function index() {
 
