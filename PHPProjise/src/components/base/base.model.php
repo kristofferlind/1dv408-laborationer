@@ -2,6 +2,7 @@
 
 class BaseModel {
 	public $notify;
+	protected $user;
 	
 	public function getActiveProject() {
 		if (isset($_SESSION['user'])) {
@@ -18,7 +19,18 @@ class BaseModel {
 		$this->notify->info('You are now logged out.');
 	}
 
+	public function setUser(User $user) {
+		$_SESSION['user'] = $user;
+		$this->user=$_SESSION['user'];
+	}
+
 	public function __construct() {
 		$this->notify = new Notify();
+		if (isset($_SESSION['user'])) {
+			$this->user = $_SESSION['user'];
+		} else {
+			$_SESSION['user'] = '';
+			$this->user = $_SESSION['user'];
+		}
 	}
 }

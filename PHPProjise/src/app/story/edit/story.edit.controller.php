@@ -16,16 +16,21 @@ class StoryEditController extends AuthenticationController {
 		if ($this->view->didUpdate()) {
 			//Get form data
 			$updateStory = $this->view->getEditStoryFormData();
-			$updateStory['storyId'] = $storyId;
-			$isUpdated = $this->model->updateStory($updateStory);
-			//Was update successful?
-			if ($isUpdated) {
-				$this->view->redirect('?section=story&page=index');
-			} else {
-				$this->view->redirect("?section=story&page=edit&id=$storyId");
-			}
-		}
+			$story = $this->objectCreator($updateStory, 'Story');
+			$isValid = $this->isValid($story);
 
+			if ($isValid) {
+				$story->storyId = $storyId;
+				$isUpdated = $this->model->updateStory($story);
+				//Was update successful?
+				if ($isUpdated) {
+					$this->view->redirect('?section=story&page=index');
+					return '';
+				}
+			}
+			$this->view->redirect("?section=story&page=edit&id=$storyId");
+			return '';
+		}
 
 		return $this->view->index($story);
 	}

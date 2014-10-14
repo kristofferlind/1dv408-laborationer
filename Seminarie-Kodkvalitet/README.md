@@ -41,7 +41,7 @@ Jag upptäckte inga fulhack, kanske till viss del för att koden var lättarbeta
 ###Reflektioner
 
 ####Positivt
-* Gillade användningen av associativa arrayer för transport av data mellan metoder, inte tänkt på det själv innan.
+* Gillade användningen av associativa arrayer för transport av data mellan metoder.
 * Databas var redan implementerat, gjorde att jag kunde bli klar med laborationen väldigt snabbt.
 * Intressant lösning med check i consts.php, alternativa lösningar: chmod och kanske modrewrite, men det är nog inte tillgängligt på alla värdar
 * Är överlag väldigt tacksam över koden jag fick att bearbeta, förmodligen många som inte hade lika mycket tur.

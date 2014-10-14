@@ -39,26 +39,26 @@ class StoryListView extends BaseView {
 	private function generateSetStatusButton($story) {
 		$storyId = $story->storyId;
 		switch ($story->storyStatusId) {
-			case 1: 
+			case StoryStatus::NotDone: 
 				return "<a href='?section=story&page=index&action=work&id=$storyId'>
 							<button data-toggle='tooltip' title='Work on story' type='button' class='btn btn-success btn-xs'>
 								<span class='glyphicon glyphicon-ok'></span>
 							</button>
 						</a>";
 				break;
-			case 2:
+			case StoryStatus::InProgress:
 				return "<a href='?section=story&page=index&action=finish&id=$storyId'>
-							<button data-toggle='tooltip' title='Cancel work on story' type='button' class='btn btn-success btn-xs'>
+							<button data-toggle='tooltip' title='Finish story' type='button' class='btn btn-success btn-xs'>
 								<span class='glyphicon glyphicon-thumbs-up'></span>
 							</button>
 						</a>
 						<a href='?section=story&page=index&action=cancel&id=$storyId'>
-							<button data-toggle='tooltip' title='Finish story' type='button' class='btn btn-warning btn-xs'>
+							<button data-toggle='tooltip' title='Cancel work on story' type='button' class='btn btn-warning btn-xs'>
 								<span class='glyphicon glyphicon-thumbs-down'></span>
 							</button>
 						</a>";
 				break;
-			case 3:
+			case StoryStatus::Done:
 				return "<a href='?section=story&page=index&action=work&id=$storyId'>
 							<button data-toggle='tooltip' title='Work on story' type='button' class='btn btn-warning btn-xs'>
 								<span class='glyphicon glyphicon-thumbs-down'></span>

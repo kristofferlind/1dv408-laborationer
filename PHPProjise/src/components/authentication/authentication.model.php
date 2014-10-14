@@ -4,16 +4,17 @@
 class AuthenticationModel extends BaseModel {
 
 	private $userDAL;
-	public $user;
+	// public $user;
 
 	//Called from BaseController so any requested url can try to log in using cookie
 	//Tries to log in user using token
 	public function tryLoadFromToken($token, $userAgent) {
-		if (isset($_SESSION['user']->userId)) {
+		if (isset($this->user->userId)) {
 			return true;
 		}
 
 		$tokenUser = $this->userDAL->retrieveUserByToken($token);
+
 		if ($tokenUser === null) {
 			return false;
 		}
@@ -28,13 +29,12 @@ class AuthenticationModel extends BaseModel {
 		}
 
 		$this->notify->success('Logged in using cookies.');
-		$_SESSION['user'] = $tokenUser;
+		$this->setUser($tokenUser);
 		return true;
 	}
 
 	public function isLoggedIn() {
-		if (isset($_SESSION['user']->userId)) {
-			$this->user = $_SESSION['user'];
+		if (isset($this->user->userId)) {
 			return true;
 		} else {
 			return false;

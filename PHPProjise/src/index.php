@@ -35,10 +35,13 @@ require_once('app/story/story.controller.php');
 require_once('app/story/story.model.php');
 require_once('app/story/story.dal.php');
 require_once('app/story/story.php');
+require_once('app/story/storystatus.php');
 require_once('app/story/list/story.list.controller.php');
 require_once('app/story/list/story.list.view.php');
 require_once('app/story/edit/story.edit.controller.php');
 require_once('app/story/edit/story.edit.view.php');
+require_once('components/error/validation.error.php');
+require_once('components/error/validation.exception.php');
 require_once('config/install.php');
 
 session_set_cookie_params(0);

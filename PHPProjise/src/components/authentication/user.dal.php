@@ -20,6 +20,18 @@ class UserDAL extends BaseDAL {
 		return $returnUser;
 	}
 
+	//Update token, expiration and user agent
+	public function updateUserInfo($userAgent, $token, $expiration, $userId) {
+		$db = $this->connection();
+		$sql = 'UPDATE users SET userAgent = :userAgent, token = :token, expiration = :expiration WHERE userId = :userId';
+		$params = array(':userAgent' => $userAgent, ':token' => $token, ':expiration' => $expiration, ':userId' => $userId);
+		$query = $db->prepare($sql);
+		$status = $query->execute($params);
+
+		//Was it successful?
+		return $status;
+	}
+
 	//Fetch user by name
 	public function retrieveUserByName($username) {
 		$db = $this->connection();

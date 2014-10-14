@@ -5,6 +5,32 @@ class BaseController {
 	protected $action;
 	protected $id;
 
+	public function objectCreator($data, $type) {
+		var_dump($data);
+		$view = new BaseView();
+		$object = null;
+		try {
+			$object = $view->createObject($data, $type);
+		} catch (ValidationException $e) {
+			$this->createNotifications($e->errors);
+			$object = null;
+		}
+		return $object;
+	}
+
+	private function createNotifications($errors) {
+		var_dump($errors);
+		$model = new BaseModel();
+
+		foreach ($errors as $error) {
+			$model->notify->error($error->description, $error->name);
+		}		
+	}
+
+	public function isValid($data) {
+		return $data !== null;
+	}
+
 	public function __construct() {
 		$view = new BaseView();
 		$this->page = $view->getPage();

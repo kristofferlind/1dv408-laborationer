@@ -12,7 +12,7 @@ class ProjectEditView extends BaseView {
 		//Encode input 
 		$projectData['name'] = htmlspecialchars($_POST['name']);
 		$projectData['description'] = htmlspecialchars($_POST['description']);
-		return $projectData;		
+		return $projectData;
 	}
 
 	public function index($project) {

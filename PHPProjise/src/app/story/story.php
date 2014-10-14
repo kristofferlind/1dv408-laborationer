@@ -25,5 +25,30 @@ class Story {
 			$this->name = $story->name;
 			$this->description = $story->description;
 		}
+		$this->validate();
+	}
+
+	//Validation
+	//name required, max: 50
+	//description required, max: 250
+	public function validate() {
+		$validationErrors = array();
+
+		if (!$this->name) {
+			array_push($validationErrors, new ValidationError('Story name is missing', 'ValidationError!'));
+		}
+		if (strlen($this->name) > 50) {
+			array_push($validationErrors, new ValidationError('Story name is too long, maximum 50', 'ValidationError!'));
+		}
+		if (!$this->description) {
+			array_push($validationErrors, new ValidationError('Story description is missing', 'ValidationError!'));
+		}
+		if (strlen($this->description) > 250) {
+			array_push($validationErrors, new ValidationError('Story description is too long, maximum 250', 'ValidationError!'));
+		}
+
+		if (count($validationErrors) > 0) {
+			throw new ValidationException($validationErrors);
+		}
 	}
 }

@@ -5,9 +5,8 @@ class ProjectModel extends BaseModel {
 	private $projectDAL;
 
 	//Fetch projects user is part of
-	public function getProjects() {
-		$user = $_SESSION['user'];
-		$projects = $this->projectDAL->getProjectsByUserId($user->userId);
+	public function getProjects() {		
+		$projects = $this->projectDAL->getProjectsByUserId($this->user->userId);
 
 		//Is user part of any project?
 		if ($projects === null) {
@@ -18,15 +17,9 @@ class ProjectModel extends BaseModel {
 
 	//Create project
 	public function createProject($projectData) {
-		$user = $_SESSION['user'];
 		$project = new Project($projectData);
 
-		//Validate
-		if (!$this->validateProject($project)) {
-			return false;
-		}
-
-		$createdProject = $this->projectDAL->addProject($project, $user->userId);
+		$createdProject = $this->projectDAL->addProject($project, $this->user->userId);
 
 		//Did creation fail?
 		if ($createdProject === null) {
@@ -39,8 +32,7 @@ class ProjectModel extends BaseModel {
 
 	public function deleteProject($projectId) {
 		//make sure user is part of project
-		$user = $_SESSION['user'];
-		$isPartOf = $this->projectDAL->checkUserIsPartOfProject($user->userId, $projectId);
+		$isPartOf = $this->projectDAL->checkUserIsPartOfProject($this->user->userId, $projectId);
 		
 		//Is user part of project?
 		if (!$isPartOf) {
@@ -63,8 +55,7 @@ class ProjectModel extends BaseModel {
 
 	//Fetch project
 	public function getProject($projectId) {
-		$user = $_SESSION['user'];
-		$isPartOf = $this->projectDAL->checkUserIsPartOfProject($user->userId, $projectId);
+		$isPartOf = $this->projectDAL->checkUserIsPartOfProject($this->user->userId, $projectId);
 
 		//Make sure user is part of project
 		if (!$isPartOf) {
@@ -87,10 +78,6 @@ class ProjectModel extends BaseModel {
 	public function updateProject($project) {
 		$updateProject = new Project($project);
 
-		if (!$this->validateProject($updateProject)) {
-			return false;
-		}
-
 		//Try to update
 		$isUpdated = $this->projectDAL->updateProject($updateProject);
 
@@ -106,34 +93,7 @@ class ProjectModel extends BaseModel {
 
 	//Set active project
 	public function activateProject($projectId) {
-		$user = $_SESSION['user'];
-		$user->activeProject = $projectId;
-		$_SESSION['user'] = $user;
-	}
-
-	//Validate project (should probably be in Project)
-	//name should exist and be at most 50chars
-	//description should exist and be at most 250chars
-	public function validateProject(Project $project) {
-		$valid = true;
-		if (!$project->name) {
-			$this->notify->error('Project name is missing.');
-			$valid = false;
-		}
-		if (strlen($project->name) >= 50) {
-			$this->notify->error('Project name is too long, maximum 50.');
-			$valid = false;
-		}
-		if (!$project->description) {
-			$this->notify->error('Project description is missing.');
-			$valid = false;
-		}
-		if (strlen($project->name) >= 250) {
-			$this->notify->error('Project description is too long, maximum 250.');
-			$valid = false;
-		}
-
-		return $valid;
+		$this->user->activeProject = $projectId;
 	}
 
 	public function __construct() {

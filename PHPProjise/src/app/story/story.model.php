@@ -34,13 +34,13 @@ class StoryModel extends BaseModel {
 
 		foreach ($stories as $story) {
 			switch ($story->storyStatusId) {
-				case 1:
+				case StoryStatus::NotDone:
 					array_push($categorized['notDone'], $story);
 					break;
-				case 2:
+				case StoryStatus::InProgress:
 					array_push($categorized['inProgress'], $story);
 					break;
-				case 3:
+				case StoryStatus::Done:
 					array_push($categorized['done'], $story);
 					break;
 			}
@@ -50,19 +50,13 @@ class StoryModel extends BaseModel {
 	}
 
 	//Create story
-	public function createStory($storyData) {
-		$projectId = $_SESSION['user']->activeProject;
+	public function createStory(Story $story) {
+		$projectId = $this->user->activeProject;
 		//Make sure user is part of project
 		if (!$this->checkUserIsPartOfProject($projectId)) {
 			return false;
 		}
 
-		$story = new Story($storyData);
-
-		//Validate
-		if (!$this->validateStory($story)) {
-			return false;
-		}
 		$isCreated = $this->storyDAL->createStory($story, $projectId);
 
 		//Did creation fail?
@@ -78,8 +72,7 @@ class StoryModel extends BaseModel {
 	//Checks if user is part of requested project
 	//Should really not be here..
 	private function checkUserIsPartOfProject($projectId) {
-		$user = $_SESSION['user'];
-		$isPartOf = $this->projectDAL->checkUserIsPartOfProject($user->userId, $projectId);
+		$isPartOf = $this->projectDAL->checkUserIsPartOfProject($this->user->userId, $projectId);
 
 		//Is user not part of project?
 		if (!$isPartOf) {
@@ -91,8 +84,7 @@ class StoryModel extends BaseModel {
 
 	//Delete project
 	public function deleteStory($storyId) {
-		$user = $_SESSION['user'];
-		$projectId = $user->activeProject;
+		$projectId = $this->user->activeProject;
 		if (!$this->checkUserIsPartOfProject($projectId)) {
 			return false;
 		}
@@ -111,8 +103,7 @@ class StoryModel extends BaseModel {
 
 	//Fetch story
 	public function getStory($storyId) {
-		$user = $_SESSION['user'];
-		$projectId = $user->activeProject;
+		$projectId = $this->user->activeProject;
 		$foundStory = $this->storyDAL->getStory($projectId, $storyId);
 
 		//No story found?
@@ -126,14 +117,10 @@ class StoryModel extends BaseModel {
 	}
 
 	//Update story
-	public function updateStory($story) {
-		$projectId = $_SESSION['user']->activeProject;
-		$updateStory = new Story($story);
-		//Validate
-		if (!$this->validateStory($updateStory)) {
-			return false;
-		}
-		$isUpdated = $this->storyDAL->updateStory($updateStory, $projectId);
+	public function updateStory(Story $story) {
+		$projectId = $this->user->activeProject;
+
+		$isUpdated = $this->storyDAL->updateStory($story, $projectId);
 
 		//Was it updated?
 		if ($isUpdated) {
@@ -153,31 +140,6 @@ class StoryModel extends BaseModel {
 		if (!$isUpdated) {
 			$this->notify->error('Could not change status');
 		}
-	}
-
-	//Validation
-	//name required, max: 50
-	//description required, max: 250
-	public function validateStory(Story $story) {
-		$valid = true;
-		if (!$story->name) {
-			$this->notify->error('Story name is missing.');
-			$valid = false;
-		}
-		if (strlen($story->name) >= 50) {
-			$this->notify->error('Story name is too long, maximum 50.');
-			$valid = false;
-		}
-		if (!$story->description) {
-			$this->notify->error('Story description is missing.');
-			$valid = false;
-		}
-		if (strlen($story->name) >= 250) {
-			$this->notify->error('Story description is too long, maximum 250.');
-			$valid = false;
-		}
-
-		return $valid;
 	}
 
 	public function __construct() {

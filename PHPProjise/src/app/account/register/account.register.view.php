@@ -34,9 +34,6 @@ class AccountRegisterView extends AccountView {
 		        			<input value='$username' type='text' name='username' class='form-control' placeholder='Username' required autofocus>
 				        	<input type='password' name='confirmPassword' class='form-control' placeholder='Password' required>
 				        	<input type='password' name='password' class='form-control' placeholder='Confirm password' required>
-				        	<label class='checkbox' name='remember'>
-				          		<input type='checkbox' value='remember-me'> Remember me
-				        	</label>
 				        	<button name='register' class='btn btn-lg btn-primary btn-block' type='submit'>Sign up</button>
 				        	Already have an account? <a href='?section=account&page=index'>Log in</a>.
 				      	</form>

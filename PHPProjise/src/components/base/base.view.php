@@ -3,6 +3,10 @@
 class BaseView {
 	public $cookieService;
 
+	public function createObject($data, $type) {
+		return new $type($data);
+	}
+
 	public function getPage() {
 		if (isset($_GET['page'])) {
 			$page = htmlspecialchars($_GET['page']);

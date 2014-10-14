@@ -5,12 +5,12 @@ class AccountLoginModel extends BaseModel {
 
 	//Fetch token (used for remembering users via cookies)
 	public function getToken() {
-		return $_SESSION['user']->token;
+		return $this->user->token;
 	}
 
 	//Fetch token expirationdate
 	public function getExpiration() {
-		return $_SESSION['user']->expiration;
+		return $this->user->expiration;
 	}
 
 	//Validates input credentials
@@ -26,9 +26,19 @@ class AccountLoginModel extends BaseModel {
 			return false;
 		}
 
-		$this->notify->success('Login was successful.');
-		$_SESSION['user'] = $dbUser;
-		return true;
+		//Need to update user info (token, user-agent and token expiration)
+		$updateStatus = $this->userDAL->updateUserInfo($loginUser->userAgent, $loginUser->token, $loginUser->expiration, $dbUser->userId);
+
+		//Update successful?
+		if ($updateStatus) {
+			$loggedInUser = new User($dbUser->username, $dbUser->password, $loginUser->userAgent, $dbUser->salt, $dbUser->userId, true, $loginUser->token, $loginUser->expiration);
+			$this->notify->success('Login was successful.');
+			$this->setUser($loggedInUser);
+			return true;
+		} else {
+			$this->notify->error('Something went wrong.');
+			return false;
+		}
 	}
 
 	public function __construct() {

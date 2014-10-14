@@ -1,5 +1,5 @@
 #Test cases
-Tests done 2/10-14
+Latest testrun 14/10-14
 ##Authentication
  - [x] Login fails for wrong password (test/blubb)
  - [x] Login remembers name

@@ -31,20 +31,23 @@ class ProjectListController extends AuthenticationController {
 			$this->model->activateProject($id);
 		}
 
-		// if ($action === 'edit') {
-		// 	$this->view->redirect('?section=project&page=edit&id=$id');
-		// 	return '';
-		// }
-
 		if ($this->view->didCreate()) {
-			$createData = $this->view->getCreateFormData();
-			$isCreated = $this->model->createProject($createData);
-			$this->view->redirect('?section=project&page=index');
-			if (!$isCreated) {
-				//show create view with errors and remembered values?
-				//or just present that it failed?
-				//might also remember data in this form
+			$inputProject = $this->view->getCreateFormData();
+			
+			//Creates objects, checking for validationexceptions
+			$project = $this->objectCreator($inputProject, 'Project');
+			$isValid = $this->isValid($project);
+
+			if ($isValid) {
+				$isCreated = $this->model->createProject($project);
+
+				if (!$isCreated) {
+					//show create view with errors and remembered values?
+					//or just present that it failed?
+					//might also remember data in this form
+				}
 			}
+			$this->view->redirect('?section=project&page=index');
 			return '';
 		}
 

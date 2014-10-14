@@ -14,20 +14,26 @@ class ProjectEditController extends AuthenticationController {
 
 		//Does user want to update?
 		if ($this->view->didUpdate()) {
-			$updateProject = $this->view->getEditProjectFormData();
-			$updateProject['projectId'] = $projectId;
-			$isUpdated = $this->model->updateProject($updateProject);
+			$successUrl = '?section=project&page=list';
+			$failUrl = "?section=project&page=edit&id=$projectId";
+			$inputProject = $this->view->getEditProjectFormData();
+			$project = $this->objectCreator($inputProject, 'Project');
+			if ($this->isValid($project)) {
+				$project->projectId = $projectId;
 
-			//Was project updated
-			if ($isUpdated) {
-				// if it was, show project
-				$this->view->redirect('?section=project&page=list');
+				$isUpdated = $this->model->updateProject($project);
+
+				//Was project updated
+				if ($isUpdated) {
+					// if it was, show project
+					$this->view->redirect($successUrl);
+				} else {
+					$this->view->redirect($failUrl);
+				}				
 			} else {
-				$this->view->redirect("?section=project&page=edit&id=$projectId");
+				$this->view->redirect($failUrl);
 			}
 		}
-
-
 		return $this->view->index($project);
 	}
 }

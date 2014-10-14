@@ -23,25 +23,30 @@ class StoryListController extends AuthenticationController {
 
 		//These should probably use an enum instead
 		if ($action === 'work') {
-			$this->model->setStatus($projectId, $id, 2);
+			$this->model->setStatus($projectId, $id, StoryStatus::InProgress);
 		}
 		if ($action === 'cancel') {
-			$this->model->setStatus($projectId, $id, 1);
+			$this->model->setStatus($projectId, $id, StoryStatus::NotDone);
 		}
 		if ($action === 'finish') {
-			$this->model->setStatus($projectId, $id, 3);
+			$this->model->setStatus($projectId, $id, StoryStatus::Done);
 		}
 
 		//Does user want to create story?
 		if ($this->view->didCreate()) {
 			$createData = $this->view->getCreateFormData();
-			$isCreated = $this->model->createStory($createData);
-			$this->view->redirect('?section=story&page=index');
-			if (!$isCreated) {
-				//show create view with errors and remembered values?
-				//or just present that it failed?
-				//might also remember data in this form
+			$story = $this->objectCreator($createData, 'Story');
+			$isValid = $this->isValid($story);
+
+			if ($isValid) {
+				$isCreated = $this->model->createStory($story);
+				if (!$isCreated) {
+					//show create view with errors and remembered values?
+					//or just present that it failed?
+					//might also remember data in this form
+				}
 			}
+			$this->view->redirect('?section=story&page=index');
 			return '';
 		}
 
