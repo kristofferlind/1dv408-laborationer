@@ -36,10 +36,10 @@ class StoryListController extends AuthenticationController {
 		if ($this->view->didCreate()) {
 			$createData = $this->view->getCreateFormData();
 			$story = $this->objectCreator($createData, 'Story');
-			$isValid = $this->isValid($story);
+			$isValid = $this->isValid($story);		//Rename to isCreated
 
 			if ($isValid) {
-				$isCreated = $this->model->createStory($story);
+				$isCreated = $this->model->createStory($story);		//Rename to isSaved
 				if (!$isCreated) {
 					//show create view with errors and remembered values?
 					//or just present that it failed?

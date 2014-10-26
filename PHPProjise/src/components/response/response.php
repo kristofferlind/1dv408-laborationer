@@ -72,7 +72,7 @@ class Response {
 			<!DOCTYPE html>
 			<html>
 			<head>
-				<title>1dv408, l2-login</title>
+				<title>PHPProjise</title>
 				<meta charset='utf-8'>
 				<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
 				<link rel='stylesheet' href='assets/css/style.css'>

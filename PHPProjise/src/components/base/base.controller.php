@@ -6,7 +6,6 @@ class BaseController {
 	protected $id;
 
 	public function objectCreator($data, $type) {
-		var_dump($data);
 		$view = new BaseView();
 		$object = null;
 		try {
@@ -19,7 +18,6 @@ class BaseController {
 	}
 
 	private function createNotifications($errors) {
-		var_dump($errors);
 		$model = new BaseModel();
 
 		foreach ($errors as $error) {

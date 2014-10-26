@@ -1,3 +1,7 @@
+felhantering mot basecontroller:
+döpa om isValid till isCreated och efterföljande isCreated till isSaved
+
+
 design
 --
 /
